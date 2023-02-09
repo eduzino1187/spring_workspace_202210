@@ -12,7 +12,9 @@ public class RegistController implements Controller{
 
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String title=request.getParameter("title");
-		System.out.println("제목은 "+title);
+		String writer=request.getParameter("writer");
+		String content=request.getParameter("content");
+		
 		return null;
 	}
 
