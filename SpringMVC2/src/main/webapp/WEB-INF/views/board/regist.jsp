@@ -35,34 +35,22 @@ $(function(){
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col">
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
-							<th>Email</th>
-							<th>Email</th>
-							<th>Email</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>John</td>
-							<td>Doe</td>
-							<td>john@example.com</td>
-							<td>john@example.com</td>
-							<td>john@example.com</td>
-						</tr>
-						
-						<tr>
-							<td colspan="5">
-								<button type="button" class="btn btn-info" id="bt_regist">글등록</button>								
-							</td>
-						</tr>
-						
-					</tbody>
-				</table>
+			<div class="col mt-3">
+				<form action="">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Enter password" name="title">
+					</div>				
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Enter password" name="writer">
+					</div>				
+					<div class="form-group">
+						<textarea class="form-control" name="content"></textarea>
+					</div>				
+					<div class="form-group">
+						<button type="button" class="btn btn-info" id="bt_regist">등록</button>
+						<button type="button" class="btn btn-info" id="bt_list">목록</button>
+					</div>				
+				</form>				
 
 			</div>
 		</div>

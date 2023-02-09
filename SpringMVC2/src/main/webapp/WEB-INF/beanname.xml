@@ -9,11 +9,12 @@
 	</bean>
 	
 	<!-- 5가지 HandlerMapping중 BeanNameUrlHandlerMapping 학습-->
-	<bean name="/board/list"  		class="com.edu.mvc2.controller.board.ListController"/>
-	<bean name="/board/regist" 	class="com.edu.mvc2.controller.board.RegistController"/>
+	<bean name="/board/list"  			class="com.edu.mvc2.controller.board.ListController"/>
+	<bean name="/board/registform" 	class="com.edu.mvc2.controller.board.RegistFormController"/>
+	<bean name="/board/regist" 		class="com.edu.mvc2.controller.board.RegistController"/>
 	<bean name="/board/detail" 		class="com.edu.mvc2.controller.board.DetailController"/>
-	<bean name="/board/edit" 		class="com.edu.mvc2.controller.board.EditController"/>
-	<bean name="/board/delete" 	class="com.edu.mvc2.controller.board.DeleteController"/>
+	<bean name="/board/edit" 			class="com.edu.mvc2.controller.board.EditController"/>
+	<bean name="/board/delete" 		class="com.edu.mvc2.controller.board.DeleteController"/>
 
 	
 	<!-- 하위 컨트롤러가 반환하는 뷰의 이름을 해석하여, View 를 반환해주는 
