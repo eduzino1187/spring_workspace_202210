@@ -1,3 +1,4 @@
+<%@page import="com.edu.mvc2.domain.Board"%>
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
@@ -52,14 +53,16 @@ $(function(){
 						</tr>
 					</thead>
 					<tbody>
+						<%for(int i=0;i<boardList.size();i++){ %>
+						<%Board board=(Board)boardList.get(i); %>
 						<tr>
-							<td>John</td>
-							<td>Doe</td>
-							<td>john@example.com</td>
-							<td>john@example.com</td>
-							<td>john@example.com</td>
+							<td><%=i%></td>
+							<td><%=board.getTitle() %></td>
+							<td><%=board.getWriter() %></td>
+							<td><%=board.getRegdate() %></td>
+							<td><%=board.getHit() %></td>
 						</tr>
-						
+						<%} %>
 						<tr>
 							<td colspan="5">
 								<button type="button" class="btn btn-info" id="bt_regist">글등록</button>								
