@@ -28,13 +28,25 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	$("#bt_regist").click(function(){
-		$("#form1").attr({
-			action:"/board/regist",
-			method:"post"
-		});
-		$("#form1").submit();		
-		
+	$("#bt_edit").click(function(){
+		if(confirm("수정하실래요?")){
+			$("#form1").attr({
+				action:"/board/edit",
+				method:"post"
+			});
+			$("#form1").submit();		
+		}
+	});
+	
+	$("#bt_del").click(function(){
+		if(confirm("삭제하시겠어요?")){
+			$("#form1").attr({
+				action:"/board/delete",
+				method:"post"
+			});
+			$("#form1").submit();		
+			
+		}
 	});
 	
 });
@@ -46,6 +58,7 @@ $(function(){
 		<div class="row">
 			<div class="col mt-3">
 				<form id="form1">
+					<input type="hidden" name="board_idx" value="<%=board.getBoard_idx()%>">
 					<div class="form-group">
 						<input type="text" class="form-control" value="<%=board.getTitle() %>" name="title">
 					</div>				
@@ -56,7 +69,8 @@ $(function(){
 						<textarea class="form-control" name="content"><%=board.getContent() %></textarea>
 					</div>				
 					<div class="form-group">
-						<button type="button" class="btn btn-info" id="bt_regist">등록</button>
+						<button type="button" class="btn btn-info" id="bt_edit">수정</button>
+						<button type="button" class="btn btn-info" id="bt_del">삭제</button>
 						<button type="button" class="btn btn-info" id="bt_list">목록</button>
 					</div>				
 				</form>				

@@ -33,8 +33,13 @@
 		<property name="boardService" ref="boardServiceImpl"/>
 	</bean>
 	
-	<bean name="/board/edit" 			class="com.edu.mvc2.controller.board.EditController"/>
-	<bean name="/board/delete" 		class="com.edu.mvc2.controller.board.DeleteController"/>
+	<bean name="/board/edit" 			class="com.edu.mvc2.controller.board.EditController">
+		<property name="boardService" ref="boardServiceImpl"/>
+	</bean>
+	
+	<bean name="/board/delete" 		class="com.edu.mvc2.controller.board.DeleteController">
+		<property name="boardService" ref="boardServiceImpl"/>
+	</bean>
 
 	
 	<!-- 하위 컨트롤러가 반환하는 뷰의 이름을 해석하여, View 를 반환해주는 
