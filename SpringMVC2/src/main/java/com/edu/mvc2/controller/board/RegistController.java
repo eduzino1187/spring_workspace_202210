@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.Controller;
 public class RegistController implements Controller{
 
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		return null;
 	}
 

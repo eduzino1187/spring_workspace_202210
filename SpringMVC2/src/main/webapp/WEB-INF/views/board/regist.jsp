@@ -25,7 +25,12 @@
 <script type="text/javascript">
 $(function(){
 	$("#bt_regist").click(function(){
-		location.href="/board/registform";	
+		$("#form1").attr({
+			action:"/board/regist",
+			method:"post"
+		});
+		$("#form1").submit();		
+		
 	});
 	
 });
@@ -36,7 +41,7 @@ $(function(){
 	<div class="container">
 		<div class="row">
 			<div class="col mt-3">
-				<form action="">
+				<form id="form1">
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Enter password" name="title">
 					</div>				
