@@ -29,7 +29,10 @@
 		<property name="boardService" ref="boardServiceImpl"/>			
 	</bean>
 	
-	<bean name="/board/detail" 			class="com.edu.mvc2.controller.board.DetailController"/>
+	<bean name="/board/detail" 			class="com.edu.mvc2.controller.board.DetailController">
+		<property name="boardService" ref="boardServiceImpl"/>
+	</bean>
+	
 	<bean name="/board/edit" 			class="com.edu.mvc2.controller.board.EditController"/>
 	<bean name="/board/delete" 		class="com.edu.mvc2.controller.board.DeleteController"/>
 

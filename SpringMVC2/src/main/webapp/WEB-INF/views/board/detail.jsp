@@ -1,9 +1,7 @@
 <%@page import="com.edu.mvc2.domain.Board"%>
-<%@page import="java.util.List"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%
-	List boardList=(List)request.getAttribute("boardList");
-	out.print("게시물 수는 "+boardList.size());
+	Board board = (Board)request.getAttribute("board");
 %>
 <!DOCTYPE html>
 <html>
@@ -31,7 +29,12 @@
 <script type="text/javascript">
 $(function(){
 	$("#bt_regist").click(function(){
-		location.href="/board/registform";	
+		$("#form1").attr({
+			action:"/board/regist",
+			method:"post"
+		});
+		$("#form1").submit();		
+		
 	});
 	
 });
@@ -41,36 +44,22 @@ $(function(){
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="col">
-				<table class="table">
-					<thead class="thead-dark">
-						<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
-							<th>Email</th>
-							<th>Email</th>
-							<th>Email</th>
-						</tr>
-					</thead>
-					<tbody>
-						<%for(int i=0;i<boardList.size();i++){ %>
-						<%Board board=(Board)boardList.get(i); %>
-						<tr>
-							<td><%=i%></td>
-							<td><a href="/board/detail?board_idx=<%=board.getBoard_idx()%>"><%=board.getTitle() %></a></td>
-							<td><%=board.getWriter() %></td>
-							<td><%=board.getRegdate() %></td>
-							<td><%=board.getHit() %></td>
-						</tr>
-						<%} %>
-						<tr>
-							<td colspan="5">
-								<button type="button" class="btn btn-info" id="bt_regist">글등록</button>								
-							</td>
-						</tr>
-						
-					</tbody>
-				</table>
+			<div class="col mt-3">
+				<form id="form1">
+					<div class="form-group">
+						<input type="text" class="form-control" value="<%=board.getTitle() %>" name="title">
+					</div>				
+					<div class="form-group">
+						<input type="text" class="form-control" value="<%=board.getWriter() %>" name="writer">
+					</div>				
+					<div class="form-group">
+						<textarea class="form-control" name="content"><%=board.getContent() %></textarea>
+					</div>				
+					<div class="form-group">
+						<button type="button" class="btn btn-info" id="bt_regist">등록</button>
+						<button type="button" class="btn btn-info" id="bt_list">목록</button>
+					</div>				
+				</form>				
 
 			</div>
 		</div>
