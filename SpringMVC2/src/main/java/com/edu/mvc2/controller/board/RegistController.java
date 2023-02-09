@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
+import com.edu.mvc2.domain.Board;
 import com.edu.mvc2.model.board.BoardService;
 
 import lombok.Setter;
@@ -21,7 +22,20 @@ public class RegistController implements Controller{
 		String writer=request.getParameter("writer");
 		String content=request.getParameter("content");
 		
-		return null;
+		Board board = new Board();
+		board.setTitle(title);
+		board.setWriter(writer);
+		board.setContent(content);
+		
+		//3단계 : 일 시키기 
+		boardService.insert(board);
+		
+		//4단계: 저장할 사항없음 
+		ModelAndView mav = new ModelAndView();
+		//개발자가 redirect 를 명시하지 않으면 default 는 포워딩 방식이다
+		mav.setViewName("redirect:/board/list");
+		
+		return mav;
 	}
 
 }
