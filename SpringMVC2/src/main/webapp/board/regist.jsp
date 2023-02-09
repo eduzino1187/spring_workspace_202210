@@ -26,7 +26,7 @@
 $(function(){
 	$("#bt_regist").click(function(){
 		$("#form1").attr({
-			action:"/board/regist",
+			action:"/test",
 			method:"post"
 		});
 		$("#form1").submit();		
