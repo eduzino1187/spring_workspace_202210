@@ -11,7 +11,8 @@ import org.springframework.web.servlet.mvc.Controller;
 public class RegistController implements Controller{
 
 	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+		String title=request.getParameter("title");
+		System.out.println("제목은 "+title);
 		return null;
 	}
 
