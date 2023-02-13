@@ -1,9 +1,12 @@
 package com.edu.db.client.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +38,20 @@ public class BoardController {
 		ModelAndView mav = new ModelAndView("redirect:/board/list");
 		return mav;
 	}
+	
+	//목록 요청처리
+	@RequestMapping(value="/board/list", method=RequestMethod.GET)
+	public String getList(Model model) {
+		//3단계: 
+		List boardList=boardService.selectAll();
+		
+		//4단계: 
+		model.addAttribute("boardList", boardList);
+		
+		return "board/list";
+	}
+	
+	
 	
 	//현재 컨트롤러 클래스내에서 발생되는 예외 중 @ExceptionHandler에 명시된 예외의
 	//자료형이 발견되면, 아래의 지정된 메서드가 수행됨.. 

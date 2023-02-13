@@ -8,7 +8,7 @@ import com.edu.db.domain.Board;
 
 @Repository
 public class JdbcBoardDAO implements BoardDAO{
-
+	
 	@Override
 	public List selectAll() {
 		// TODO Auto-generated method stub
