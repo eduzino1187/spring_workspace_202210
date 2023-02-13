@@ -51,7 +51,40 @@ public class BoardController {
 		return "board/list";
 	}
 	
+	@RequestMapping(value="/board/detail", method=RequestMethod.GET)
+	public ModelAndView getDetail(int board_idx) {
+		//3단계: 
+		Board board=boardService.select(board_idx);
+		
+		//4단계: 
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("board", board);//결과저장 : model처리
+		mav.setViewName("board/detail"); //view 처리
+		
+		return mav;
+	}
 	
+	//수정요청 처리 
+	@RequestMapping(value="/board/edit", method=RequestMethod.POST)
+	public ModelAndView edit(Board board) {
+		//3단계: 
+		boardService.update(board);
+		
+		//4단계:생략, 즉 상세보기를 재접속  redirect 
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("redirect:/board/detail?board_idx="+board.getBoard_idx());  
+		return mav;
+	}
+	
+	
+	//삭제요청 처리 
+	@RequestMapping(value="/board/delete", method=RequestMethod.POST)
+	public String del(int board_idx) {
+		//3단계 
+		boardService.delete(board_idx);
+		
+		return "redirect:/board/list";
+	}
 	
 	//현재 컨트롤러 클래스내에서 발생되는 예외 중 @ExceptionHandler에 명시된 예외의
 	//자료형이 발견되면, 아래의 지정된 메서드가 수행됨.. 
