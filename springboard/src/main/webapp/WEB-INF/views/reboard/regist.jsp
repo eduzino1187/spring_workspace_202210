@@ -25,7 +25,7 @@
 <script type="text/javascript">
 function regist(){
 	$("#form1").attr({
-		action:"/board/regist",
+		action:"/reboard/regist",
 		method:"post"
 	});	
 	$("#form1").submit();

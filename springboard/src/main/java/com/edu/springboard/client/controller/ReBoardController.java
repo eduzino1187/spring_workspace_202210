@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.edu.springboard.domain.ReBoard;
 import com.edu.springboard.model.reboard.ReBoardService;
 
 //답변게시판의 CRUD를 수행할 하위 컨트롤러
@@ -31,6 +34,35 @@ public class ReBoardController {
 		//4단계: 결과저장
 		ModelAndView mav = new ModelAndView("reboard/list");
 		mav.addObject("reboardList", reboardList);
+		
+		return mav;
+	}
+	
+	//글쓰기 폼 요청 
+	@GetMapping("/reboard/registform")
+	public ModelAndView registForm() {
+		return new ModelAndView("reboard/regist");
+	}
+	
+	//글쓰기 요청처리 
+	@PostMapping("/reboard/regist")
+	public ModelAndView regist(ReBoard reboard) {
+		//3단계: 일 시키기 
+		reboardService.insert(reboard);
+		
+		//4단계:생략 
+		return new ModelAndView("redirect:/reboard/list");
+	}
+	
+	//상세보기 요청 처리 
+	@GetMapping("/reboard/detail")
+	public ModelAndView getDetail(int reboard_idx){
+		//3단계:일 시키기 
+		ReBoard reboard=reboardService.select(reboard_idx);
+		
+		//4단계: 결과저장
+		ModelAndView mav = new ModelAndView("reboard/detail");
+		mav.addObject("reboard", reboard);
 		
 		return mav;
 	}

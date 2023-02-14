@@ -30,7 +30,7 @@
 <script type="text/javascript">
 $(function(){
 	$("#bt_regist").click(function(){
-		location.href="/board/registform";	
+		location.href="/reboard/registform";	
 	});
 	
 });
@@ -56,7 +56,7 @@ $(function(){
 						<%ReBoard reboard=(ReBoard)reboardList.get(i); %>
 						<tr>
 							<td><%=i%></td>
-							<td><a href="/board/detail?board_idx=<%=reboard.getReboard_idx()%>"><%=reboard.getTitle() %></a></td>
+							<td><a href="/reboard/detail?reboard_idx=<%=reboard.getReboard_idx()%>"><%=reboard.getTitle() %></a></td>
 							<td><%=reboard.getWriter() %></td>
 							<td><%=reboard.getRegdate() %></td>
 							<td><%=reboard.getHit() %></td>
