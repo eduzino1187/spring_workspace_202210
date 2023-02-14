@@ -42,6 +42,7 @@ public class MybatisReBoardDAO implements ReBoardDAO{
 	@Override
 	public void update(ReBoard reboard) throws ReBoardException{
 		int result=sqlSessionTemplate.update("ReBoard.update", reboard);
+	
 		if(result<1) {
 			throw new ReBoardException("글 수정실패");
 		}

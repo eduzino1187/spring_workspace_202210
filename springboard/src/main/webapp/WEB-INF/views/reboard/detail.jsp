@@ -31,7 +31,7 @@ $(function(){
 	$("#bt_edit").click(function(){
 		if(confirm("수정하실래요?")){
 			$("#form1").attr({
-				action:"/board/edit",
+				action:"/reboard/edit",
 				method:"post"
 			});
 			$("#form1").submit();		
@@ -41,7 +41,7 @@ $(function(){
 	$("#bt_del").click(function(){
 		if(confirm("삭제하시겠어요?")){
 			$("#form1").attr({
-				action:"/board/delete",
+				action:"/reboard/delete",
 				method:"post"
 			});
 			$("#form1").submit();		

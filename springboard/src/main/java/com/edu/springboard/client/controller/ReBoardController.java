@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.springboard.domain.ReBoard;
+import com.edu.springboard.exception.ReBoardException;
 import com.edu.springboard.model.reboard.ReBoardService;
 
 //답변게시판의 CRUD를 수행할 하위 컨트롤러
@@ -67,6 +69,29 @@ public class ReBoardController {
 		return mav;
 	}
 	
+	//삭제요청 처리 
+	@RequestMapping(value="/reboard/delete", method=RequestMethod.POST)
+	public ModelAndView del(int reboard_idx) {
+		//3단계: 
+		reboardService.delete(reboard_idx);
+		
+		//4단계:생략 
+		return new ModelAndView("redirect:/reboard/list");
+	}
+	
+	
+	
+	//한건수정 
+	@PostMapping("/reboard/edit")
+	public ModelAndView edit(ReBoard reboard){
+		//3단계: 일시키기 
+		reboardService.update(reboard);
+		
+		//4단계:생략 
+		return new ModelAndView("redirect:/reboard/detail?reboard_idx="+reboard.getReboard_idx());
+	}
+	
+	
 	//답변등록 요청
 	/*
 	 * 서비스의 존재가 없을 경우, 컨트롤러는 업무를 구체적으로 처리해야 
@@ -82,7 +107,34 @@ public class ReBoardController {
 		
 		return null;
 	}
+	
+	
+	//글쓰기, 수정, 삭제의 경우 ReBoardException을 처리 
+	@ExceptionHandler(ReBoardException.class)
+	public ModelAndView handle(ReBoardException e){
+		
+		//에러저장 
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("e",e);
+		mav.setViewName("error/result");
+		
+		return mav;
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
