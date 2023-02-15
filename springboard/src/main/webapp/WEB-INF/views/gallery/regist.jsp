@@ -173,7 +173,7 @@ function regist(){
 	$.ajax({
 		url:"/gallery/regist", 
 		type:"post",
-		processData:false,  // title=test&writer=ddd 문자열화 방지
+		processData:false,  //title=test&writer=ddd 문자열화 방지
 		contentType:false, //application/x-www 방지 ...
 		data:formData, 
 		success:function(result, status, xhr){

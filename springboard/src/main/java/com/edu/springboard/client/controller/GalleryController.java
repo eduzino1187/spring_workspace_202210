@@ -23,9 +23,11 @@ public class GalleryController {
 	//겔러리 업로드 요청처리 
 	@PostMapping("/gallery/regist")
 	public ModelAndView regist(Gallery gallery) {
-		MultipartFile photo=gallery.getPhoto();
+		MultipartFile[] photo=gallery.getPhoto();
 		
-		logger.info("업로드된 파일은 "+photo.getOriginalFilename());
+		for(int i=0;i<photo.length;i++) {
+			logger.info("업로드된 파일은 "+photo[i].getOriginalFilename());
+		}
 		
 		return null;
 	}
