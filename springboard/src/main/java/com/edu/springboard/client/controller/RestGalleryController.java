@@ -1,5 +1,7 @@
 package com.edu.springboard.client.controller;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -8,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +22,7 @@ import com.edu.springboard.exception.FileUploadException;
 import com.edu.springboard.exception.GalleryException;
 import com.edu.springboard.exception.PhotoException;
 import com.edu.springboard.model.gallery.GalleryService;
+import com.google.gson.Gson;
 
 //RestController일 경우, 모든 메서드에 @ResponseBody를 생략가능
 @RestController
@@ -50,6 +54,28 @@ public class RestGalleryController {
 		
 		return "ok";
 	}
+	
+	//비동기 목록 요청 처리 (주요 클라이언트- web - ajax)
+	//앱 ( 안드로이드, 아이폰)
+	@GetMapping("/rest/gallery/list")
+	public List<Gallery> getList() {
+		//3단계:
+		List<Gallery> galleryList=galleryService.selectAll();
+		
+		return galleryList;
+	}
+	
+	//겔러리 한건 가져오기 
+	@GetMapping("/rest/gallery/detail")
+	public Gallery getDetail(int gallery_idx) {
+		//3단계: 일 시키기
+		Gallery gallery =galleryService.select(gallery_idx);
+		return gallery;
+	}
+	
+		
+	
+	
 	//컨트롤러 메서드들에서 예외가 발생했을때의 처리 
 	@ExceptionHandler(FileUploadException.class)
 	@ResponseBody

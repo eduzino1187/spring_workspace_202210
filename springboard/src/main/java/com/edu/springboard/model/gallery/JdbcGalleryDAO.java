@@ -57,8 +57,36 @@ public class JdbcGalleryDAO implements GalleryDAO{
 
 	@Override
 	public Gallery select(int gallery_idx) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql="select * from gallery where gallery_idx=?";
+		
+		Gallery gallery=jdbcTemplate.queryForObject(sql, new Object[] {gallery_idx}, new RowMapper<Gallery>() {
+			public Gallery mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Gallery gallery =new Gallery(); //empty
+				gallery.setGallery_idx(rs.getInt("gallery_idx"));
+				gallery.setTitle(rs.getString("title"));
+				gallery.setWriter(rs.getString("writer"));
+				gallery.setContent(rs.getString("content"));
+				gallery.setRegdate(rs.getString("regdate"));
+				gallery.setHit(rs.getInt("hit"));
+				
+				//Gallery DTO 가 보유한  photoList 채우기
+				String sql="select * from photo where gallery_idx=?";
+				
+				List photoList=jdbcTemplate.query(sql, new Object[]{gallery.getGallery_idx()}, new RowMapper<Photo>() {
+					public Photo mapRow(ResultSet rs, int rowNum) throws SQLException {
+						Photo photo = new Photo();
+						photo.setPhoto_idx(rs.getInt("photo_idx"));
+						photo.setFilename(rs.getString("filename"));
+						
+						return photo;
+					}
+				});
+				//구한 하위 포토 리스트를 다시 겔러리에 대입 
+				gallery.setPhotoList(photoList);
+				return gallery;
+			}
+		});
+		return gallery;
 	}
 
 	//CRUD는 모두  update()  메서드 이용하면 된다

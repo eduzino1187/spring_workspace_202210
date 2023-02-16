@@ -32,14 +32,12 @@ public class GalleryServiceImpl implements GalleryService{
 	
 	@Override
 	public List selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return galleryDAO.selectAll();
 	}
 
 	@Override
 	public Gallery select(int gallery_idx) {
-		// TODO Auto-generated method stub
-		return null;
+		return galleryDAO.select(gallery_idx);
 	}
 
 	@Override
