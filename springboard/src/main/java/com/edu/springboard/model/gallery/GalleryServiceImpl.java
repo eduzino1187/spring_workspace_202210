@@ -20,11 +20,11 @@ public class GalleryServiceImpl implements GalleryService{
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	@Qualifier("mybatisGalleryDAO")
+	@Qualifier("jdbcGalleryDAO")
 	private GalleryDAO galleryDAO;
 	
 	@Autowired
-	@Qualifier("mybatisPhotoDAO")
+	@Qualifier("jdbcPhotoDAO")
 	private PhotoDAO photoDAO;
 	
 	@Autowired

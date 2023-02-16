@@ -37,6 +37,7 @@
 		원래  Mybatis 가 취득했던 커넥션을 스프링이 뺐었기 때문에, dataSourde-ref 로
 		디비정보를 SqlSessionFactoryBean 에 넣어주자
 	-->
+	<!-- DB연동 기술 중  Mybatis Spring 사용을 위한 설정 -->
 	<bean id="sqlSessionFactoryBean" 
 		class="org.mybatis.spring.SqlSessionFactoryBean" 
 		p:dataSource-ref="dataSource"
@@ -45,6 +46,11 @@
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"/>		
 	</bean>		
+	
+	<!-- DB연동 기술 중  Spring JDBC 사용을 위한 설정 -->
+	<bean id="jdbcTemplate" 
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource"/>
 	
 	<context:component-scan base-package="com.edu.springboard.model"/>	
 														

@@ -7,11 +7,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,28 +20,41 @@ import com.edu.springboard.exception.GalleryException;
 import com.edu.springboard.exception.PhotoException;
 import com.edu.springboard.model.gallery.GalleryService;
 
-//겔러리와 관련된 모든 요청을 처리하는 하위 컨트롤러 
-@Controller
-public class GalleryController {
+//RestController일 경우, 모든 메서드에 @ResponseBody를 생략가능
+@RestController
+public class RestGalleryController {
 	private Logger logger=LoggerFactory.getLogger(this.getClass().getName());
 	
-	//느슨하게 보유 
 	@Autowired
 	private GalleryService galleryService;
 	
-	
-	@GetMapping("/gallery/registform")
-	public ModelAndView registForm() {
-		return new ModelAndView("gallery/regist");
+	//겔러리 업로드 요청처리 
+	@PostMapping("/gallery/regist")
+	@ResponseBody  //메서드의 반환값을 jsp로 매핑하지말고, 순수 데이터로 처리
+	//응답정보로 보낸다...	
+	public String regist(Gallery gallery, HttpServletRequest request) {
+		MultipartFile[] photo=gallery.getPhoto();
+		
+		for(int i=0;i<photo.length;i++) {
+			logger.info("업로드된 파일은 "+photo[i].getOriginalFilename());
+		}
+		
+		//3단계: 글등록하기 ( db + file)
+		HttpSession httpSession=request.getSession();
+		ServletContext application=httpSession.getServletContext();
+		String realPath=application.getRealPath("/resources/data/");
+		
+		logger.info(realPath); //파일의 경로 확인을 위함
+		
+		galleryService.regist(gallery, realPath);
+		
+		return "ok";
 	}
-	
-	
 	//컨트롤러 메서드들에서 예외가 발생했을때의 처리 
 	@ExceptionHandler(FileUploadException.class)
-	public ModelAndView handle(FileUploadException e) {
-		ModelAndView mav = new ModelAndView("error/result");
-		mav.addObject("e", e);
-		return mav;
+	@ResponseBody
+	public String handle(FileUploadException e) {
+		return "errro";
 	}
 	
 	@ExceptionHandler(GalleryException.class)
@@ -58,10 +70,5 @@ public class GalleryController {
 		mav.addObject("e", e);
 		return mav;
 	}
-	
+
 }
-
-
-
-
-
