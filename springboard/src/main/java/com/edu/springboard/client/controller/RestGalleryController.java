@@ -67,9 +67,11 @@ public class RestGalleryController {
 	
 	//겔러리 한건 가져오기 
 	@GetMapping("/rest/gallery/detail")
+	@ResponseBody 
 	public Gallery getDetail(int gallery_idx) {
 		//3단계: 일 시키기
 		Gallery gallery =galleryService.select(gallery_idx);
+		
 		return gallery;
 	}
 	

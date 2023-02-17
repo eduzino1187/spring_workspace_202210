@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.springboard.domain.Gallery;
+import com.edu.springboard.domain.ReBoard;
 import com.edu.springboard.exception.FileUploadException;
 import com.edu.springboard.exception.GalleryException;
 import com.edu.springboard.exception.PhotoException;
@@ -35,6 +36,19 @@ public class GalleryController {
 	public ModelAndView registForm() {
 		return new ModelAndView("gallery/regist");
 	}
+	
+	
+	//테스트 
+	@PostMapping("/gallery/test")
+	public String regist(Gallery gallery) {
+		
+		logger.info("title is "+gallery.getTitle());
+		logger.info("writer is "+gallery.getWriter());
+		logger.info("content is "+gallery.getContent());
+		
+		return null;
+	}
+	
 	
 	
 	//컨트롤러 메서드들에서 예외가 발생했을때의 처리 
