@@ -60,6 +60,26 @@ public class RestNoticeController {
 		return notice;
 	}
 	
+	//삭제요청 처리 
+	@RequestMapping(value="/notice/del", method=RequestMethod.GET)
+	public String del(int notice_idx) {
+		//3단계: 일시키기 
+		noticeService.delete(notice_idx);
+		//반환값을 보다 체계적인 정보를 구성하려면, ResponseEntity라는 객체 이용가능
+		return "ok";
+	}
+	
+	//수정요청 처리 
+	@RequestMapping(value="/notice/edit", method=RequestMethod.POST)
+	public String edit(Notice notice) {
+		//3단계: 일 시키기 
+		noticeService.update(notice);
+		
+		return "ok";
+	}
+	
+	
+	
 	
 	@ExceptionHandler(NoticeException.class)
 	public String handle(NoticeException e) {

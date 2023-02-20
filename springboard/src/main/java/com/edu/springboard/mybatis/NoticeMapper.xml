@@ -18,7 +18,7 @@
 	
 	<update id="update">
 		update notice set title=#{title}, writer=#{writer}, content=#{content}
-		where notice_idx#{notice_idx}
+		where notice_idx=#{notice_idx}
 	</update>
 	
 	<delete id="delete" parameterType="int">
