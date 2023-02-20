@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name = "domain.Notice" table = "notice">
+      
+      <meta attribute = "class-description">
+         This class contains the notice detail. 
+      </meta>
+      
+      <id name = "notice_idx" type = "int" column = "notice_idx">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "title" 				column = "title" 		type = "string"/>
+      <property name = "writer" 			column = "writer" 		type = "string"/>
+      <property name = "content" 		column = "content"	type = "string"/>
+      <property name = "regdate" 		column = "regdate" 	type = "string"/>
+      <property name = "hit" 				column = "hit" 			type = "int"/>
+      
+   </class>
+</hibernate-mapping>
