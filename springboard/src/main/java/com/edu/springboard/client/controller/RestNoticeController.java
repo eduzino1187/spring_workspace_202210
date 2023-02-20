@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.springboard.domain.Notice;
@@ -46,6 +47,19 @@ public class RestNoticeController {
 		
 		return noticeList;
 	}
+	
+	
+	@RequestMapping(value="/notice/detail", method=RequestMethod.GET)
+	public Notice getDetail(int notice_idx) {
+		//3단계: 서비스에 일시키기
+		Notice notice=noticeService.select(notice_idx);
+		//@ResponseBody 가 적용되지 않으면 이 메서드의 반환값을 이용하여 
+		// InternalResourceViewResolver 가 다음과 같은 정보를 구성하여
+		//View로 반환해 버릴 것이다. 
+		//예상정보: WEB-INF/views/Notice.jsp (우리가 의도한 바가 아님)
+		return notice;
+	}
+	
 	
 	@ExceptionHandler(NoticeException.class)
 	public String handle(NoticeException e) {
