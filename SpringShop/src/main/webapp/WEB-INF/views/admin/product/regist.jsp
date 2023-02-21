@@ -6,6 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AdminLTE 3 | Dashboard</title>
 <%@ include file="../inc/header_link.jsp"%>
+<style type="text/css">
+.box-style{
+	width:90px;
+	height:95px;
+	border:1px solid #ccc;
+	display:inline-block;
+	margin:5px;
+}
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 	<div class="wrapper">
@@ -46,32 +55,62 @@
 			<!-- /.content-header -->
 
 			<!-- Main content -->
-			<section class="content">
+			<section class="content" id="app1">
 				<div class="container-fluid">
 				
 					<!-- Main row -->
 					<div class="row">
 						<div class="col">
+							
 							<div class="form-group row">
 								<div class="col">
-									<input type="email" class="form-control" placeholder="상품명">
+									<select class="form-control" name="category_idx"></select>
+								</div>
+							</div>							
+							
+							<div class="form-group row">
+								<div class="col">
+									<input type="email" class="form-control" name="product_name" placeholder="상품명">
 								</div>
 							</div>							
 							<div class="form-group row">
 								<div class="col">
-									<input type="email" class="form-control" placeholder="상품명">
+									<input type="email" class="form-control" name="brand" placeholder="브랜드명">
 								</div>
 							</div>							
 							<div class="form-group row">
 								<div class="col">
-									<input type="email" class="form-control" placeholder="상품명">
+									<input type="number" class="form-control" name="price">
 								</div>
-							</div>							
+							</div>					
+									
 							<div class="form-group row">
 								<div class="col">
-									<input type="file" class="form-control" placeholder="상품이미지">
+									<input type="number" class="form-control" name="discount">
 								</div>
-							</div>							
+							</div>
+								
+							<div class="form-group row">
+								<div class="col">
+									<input type="file" class="form-control" name="file" multiple>
+								</div>
+							</div>
+							
+							<div class="form-group row">
+								<div class="col">
+									<template v-for="i in count">
+										<imagebox />
+									</template>
+								</div>
+							</div>
+							
+							
+							<div class="form-group row">
+								<div class="col">
+									<textarea class="form-control" id="detail" name="detail"></textarea>
+								</div>
+							</div>
+														
 							<div class="form-group row">
 								<div class="col-sm-1">
 									<button type="button" class="btn btn-block btn-danger btn-lg">등록</button>							
@@ -100,6 +139,56 @@
 	</div>
 	<!-- ./wrapper -->
 	<%@ include file="../inc/footer_link.jsp" %>
+	<script type="text/javascript">
+		let app1;
+		
+		const imagebox={
+			template:`
+				<div class="box-style">
+					<div>X</div>
+					<img src="" />
+				</div>
+			`,
+			data(){
+				return{
+					
+				};
+			}
+		};
+		
+		app1=new Vue({
+			el:"#app1",
+			components:{
+				imagebox
+			},
+			data:{
+				count:5,
+				imageList:[]  //files(read only) 배열의 정보를  담아놓을 배열
+			}
+		});
+		
+		function preview(files){
+			//정보를 분석하여  json으로 바꾼다...
+			let json=[];
+			json["key"]=0; //삭제시 사용..
+			
+		}
+		
+		//서머노트 적용하기 
+		$(function(){
+			$("#detail").summernote({
+				height:200
+			});
+			
+			//파일에 이벤트 연결 
+			$("input[name='file']").change(function(){
+				console.log(this.files);
+				preview(this.files);
+			});
+			
+		});
+	
+	</script>
 </body>
 </html>
 
