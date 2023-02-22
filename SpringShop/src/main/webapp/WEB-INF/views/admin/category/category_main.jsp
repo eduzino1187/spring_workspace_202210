@@ -46,7 +46,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">상품등록</h1>
+							<h1 class="m-0">카테고리 관리</h1>
 						</div>
 						<!-- /.col -->
 						<div class="col-sm-6">
@@ -82,10 +82,10 @@
 												<td colspan="2">
 									        		<div class="form-group row">
 									        			<div class="col-sm-9">
-										                    <input type="text" name="table_search" class="form-control" placeholder="Search">
+										                    <input type="text" name="category_name" class="form-control" placeholder="카테고리 입력">
 									        			</div>
 									        			<div class="col-sm-3">
-										                    <button type="button" class="btn btn-danger">등록</button>
+										                    <button type="button" class="btn btn-danger" id="bt_regist">등록</button>
 									        			</div>
 									        		</div>
 												</td>
@@ -224,47 +224,22 @@
 		등록
 		------------------------------------------*/
 		function regist(){
-			//파일업로드를 커스터마이징 시켰기 때문에...
-			let formData = new FormData();
-			
-			formData.append("category.category_idx", $("select[name='category_idx']").val());
-			formData.append("product_name", $("input[name='product_name']").val());
-			formData.append("brand", $("input[name='brand']").val());
-			formData.append("price", $("input[name='price']").val());
-			formData.append("discount", $("input[name='discount']").val());
-			formData.append("detail", $("textarea[name='detail']").val());
-			
-			//선택한 이미지 수만큼  formData 에 추가 
-			for(let i=0;i<app1.imageList.length;i++){
-				let json=app1.imageList[i];
-				formData.append("photo", json.file);
-			}
-			
 			$.ajax({
-				url:"/admin/rest/product", 
-				type:"post", 
-				data:formData, 
-				processData:false, /*query string 사용여부*/
-				contentType:false, /* application/x-www-form~~ 사용여부*/
+				url:"/admin/rest/category",
+				type:"post",
+				data:{
+					category_name:$("input[name='category_name']").val()
+				}, 
 				success:function(result, status, xhr){
-					console.log(result);
+					alert(result.msg); // {code:,  msg:"성공"}
 				}
-			});
-			
+				
+			});			
 		}
 		
 		//서머노트 적용하기 
 		$(function(){
-			$("#detail").summernote({
-				height:200
-			});
-			
-			//파일에 이벤트 연결 
-			$("input[name='file']").change(function(){
-				console.log(this.files);
-				preview(this.files);
-			});
-			
+		
 			//등록 이벤트 연결 
 			$("#bt_regist").click(function(){
 				regist();
