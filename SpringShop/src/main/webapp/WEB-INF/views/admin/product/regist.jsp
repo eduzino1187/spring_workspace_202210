@@ -19,6 +19,10 @@
 	display:inline-block;
 	margin:5px;
 }
+.box-style img{
+	width:75px;
+	height:70px;
+}
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -108,8 +112,8 @@
 							
 							<div class="form-group row">
 								<div class="col">
-									<template v-for="i in imageList">
-										<imagebox />
+									<template v-for="json in imageList">
+										<imagebox :key="json.key" :obj="json"/>
 									</template>
 								</div>
 							</div>
@@ -156,12 +160,13 @@
 			template:`
 				<div class="box-style">
 					<div>X</div>
-					<img src="" />
+					<img :src="json.binary" />
 				</div>
 			`,
+			props:["obj"],
 			data(){
 				return{
-					
+					json:this.obj
 				};
 			}
 		};
@@ -178,6 +183,22 @@
 		});
 		
 		/*------------------------------------------
+		중복된 이미지체크
+		------------------------------------------*/
+		function checkDuplicate(filename){
+			let count=0;
+			
+			for(let i=0;i<app1.imageList.length;i++){
+				let json=app1.imageList[i];
+				if(json.name==filename){ //중복발견..
+					count++;
+					break;
+				}
+			}
+			return count;
+		}
+		
+		/*------------------------------------------
 		미리보기
 		------------------------------------------*/
 		function preview(files){
@@ -186,21 +207,22 @@
 			for(let i=0;i<files.length;i++){
 				let file = files[i];
 				
-				let reader = new FileReader();//스트림 생성
-				reader.onload=(e)=>{
-					
-					key++; //사용자가 이미지를 선택할때마다 1씩 증가하여 중복을 불허한다
-					
-					let json=[]; // imageList배열에 복합적인 정보를 담아놓기 위해 
-					json['key']=key;//추후 이미지 삭제시 기준값으로 사용예정 
-					json['name']=file.name; //중복이미지가 추가되지 않도록... 
-					json['binary']=e.target.result; //src에 대입할 바이너리 정보 
-					json['file']=file; //전송할때 파라미터에 심을 파일
-					
-					app1.imageList.push(json);
-				};
-				reader.readAsDataURL(file);//파일읽기
-				
+				if(checkDuplicate(file.name) <1){ //중복된 이미지가 없을때만...
+					let reader = new FileReader();//스트림 생성
+					reader.onload=(e)=>{
+						
+						key++; //사용자가 이미지를 선택할때마다 1씩 증가하여 중복을 불허한다
+						
+						let json=[]; // imageList배열에 복합적인 정보를 담아놓기 위해 
+						json['key']=key;//추후 이미지 삭제시 기준값으로 사용예정 
+						json['name']=file.name; //중복이미지가 추가되지 않도록... 
+						json['binary']=e.target.result; //src에 대입할 바이너리 정보 
+						json['file']=file; //전송할때 파라미터에 심을 파일
+						
+						app1.imageList.push(json);
+					};
+					reader.readAsDataURL(file);//파일읽기
+				}
 			}
 			
 		}
