@@ -1,7 +1,12 @@
 package com.edu.springshop.admin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,11 +32,23 @@ public class RestCategoryController {
 		return message;
 	}
 
+	@GetMapping("/category")
+	public List<Category> getList(){
+		//3단계 
+		return categoryService.selectAll();
+	}
+	
+	
 	@ExceptionHandler(CategoryException.class)
-	public Message handle(CategoryException e) {
+	public ResponseEntity<Message> handle(CategoryException e) {
+		//HTTP 응답정보를 보다 세밀하게 구성하고 싶다면.. 
+		//Http 응답 메시지를 구성할 수 있는 객체를 지원함..
 		Message message = new Message();		
 		message.setMsg(e.getMessage());
-		return message;
+		
+		ResponseEntity<Message> entity=null;
+		entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
 	}
 }
 

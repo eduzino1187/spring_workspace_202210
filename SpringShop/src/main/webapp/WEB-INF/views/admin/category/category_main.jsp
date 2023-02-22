@@ -89,11 +89,12 @@
 									        			</div>
 									        		</div>
 												</td>
-											</tr>						                
-						                    <tr>
-						                        <td>183</td>
-						                        <td>John Doe</td>
-						                    </tr>
+											</tr>	
+											
+											<template v-for="category in categoryList">					                
+												<row :key="category.category_idx" :obj="category"/>
+						                    </template>
+						                    
 						                </tbody>
 						            </table>
 						        </div>
@@ -147,19 +148,18 @@
 	<%@ include file="../inc/footer_link.jsp" %>
 	<script type="text/javascript">
 		let app1;
-		let key=0;
 		
-		const imagebox={
+		const row={
 			template:`
-				<div class="box-style">
-					<div>X</div>
-					<img :src="json.binary" />
-				</div>
+				<tr>
+					<td>{{category.category_idx}}</td>
+					<td>{{category.category_name}}</td>					
+				</tr>
 			`,
 			props:["obj"],
 			data(){
 				return{
-					json:this.obj
+					category:this.obj
 				};
 			}
 		};
@@ -167,59 +167,15 @@
 		app1=new Vue({
 			el:"#app1",
 			components:{
-				imagebox
+				row
 			},
 			data:{
 				count:5,
-				imageList:[]  //files(read only) 배열의 정보를  담아놓을 배열
+				categoryList:[]
 			}
 		});
 		
-		/*------------------------------------------
-		중복된 이미지체크
-		------------------------------------------*/
-		function checkDuplicate(filename){
-			let count=0;
-			
-			for(let i=0;i<app1.imageList.length;i++){
-				let json=app1.imageList[i];
-				if(json.name==filename){ //중복발견..
-					count++;
-					break;
-				}
-			}
-			return count;
-		}
-		
-		/*------------------------------------------
-		미리보기
-		------------------------------------------*/
-		function preview(files){
-			
-			//이미지 화면에 출력
-			for(let i=0;i<files.length;i++){
-				let file = files[i];
-				
-				if(checkDuplicate(file.name) <1){ //중복된 이미지가 없을때만...
-					let reader = new FileReader();//스트림 생성
-					reader.onload=(e)=>{
-						
-						key++; //사용자가 이미지를 선택할때마다 1씩 증가하여 중복을 불허한다
-						
-						let json=[]; // imageList배열에 복합적인 정보를 담아놓기 위해 
-						json['key']=key;//추후 이미지 삭제시 기준값으로 사용예정 
-						json['name']=file.name; //중복이미지가 추가되지 않도록... 
-						json['binary']=e.target.result; //src에 대입할 바이너리 정보 
-						json['file']=file; //전송할때 파라미터에 심을 파일
-						
-						app1.imageList.push(json);
-					};
-					reader.readAsDataURL(file);//파일읽기
-				}
-			}
-			
-		}
-		
+
 		/*------------------------------------------
 		등록
 		------------------------------------------*/
@@ -230,16 +186,37 @@
 				data:{
 					category_name:$("input[name='category_name']").val()
 				}, 
+				//서버로부터 전송된 HTTP 응답 헤더 정보가 성공일때 반응
 				success:function(result, status, xhr){
 					alert(result.msg); // {code:,  msg:"성공"}
+				},
+				
+				//서버로부터 전송된 HTTP 응답 헤더 정보가 실패일때 반응
+				error:function(xhr, status, err){
+					alert("에러에요"+err);
 				}
 				
 			});			
 		}
 		
+		
+		function getCategoryList(){
+			//서버에서 비동기로 가져다가,  app1의  categoryList 에 대입 
+			$.ajax({
+				url:"/admin/rest/category",
+				type:"get",
+				success:function(result, status, xhr){
+					app1.categoryList = result;										
+				}
+			});			
+		}
+		
 		//서머노트 적용하기 
 		$(function(){
-		
+			
+			//비동기로 카테고리 목록 가져오기
+			getCategoryList();
+			
 			//등록 이벤트 연결 
 			$("#bt_regist").click(function(){
 				regist();
