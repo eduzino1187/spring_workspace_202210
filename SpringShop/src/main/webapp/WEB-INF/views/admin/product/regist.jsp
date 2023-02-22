@@ -1,4 +1,9 @@
+<%@page import="com.edu.springshop.domain.Category"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%
+	List<Category> categoryList = (List)request.getAttribute("categoryList");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,7 +69,12 @@
 							
 							<div class="form-group row">
 								<div class="col">
-									<select class="form-control" name="category_idx"></select>
+									<select class="form-control" name="category_idx">
+										<option value="0">카테고리 선택</option>
+										<%for(Category category : categoryList){ %>
+										<option value="<%=category.getCategory_idx()%>"><%=category.getCategory_name() %></option>
+										<%} %>
+									</select>
 								</div>
 							</div>							
 							
@@ -112,11 +122,9 @@
 							</div>
 														
 							<div class="form-group row">
-								<div class="col-sm-1">
-									<button type="button" class="btn btn-block btn-danger btn-lg">등록</button>							
-								</div>
-								<div class="col-sm-1">
-									<button type="button" class="btn btn-block btn-danger btn-lg">목록</button>									
+								<div class="col">
+									<button type="button" class="btn btn-danger">등록</button>							
+									<button type="button" class="btn btn-danger">목록</button>									
 								</div>
 							</div>							
 							
@@ -124,6 +132,7 @@
 					</div>
 					<!-- /.row (main row) -->
 				</div>
+				
 				<!-- /.container-fluid -->
 			
 			</section>
