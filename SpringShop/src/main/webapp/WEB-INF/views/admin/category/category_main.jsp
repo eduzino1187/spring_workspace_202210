@@ -2,7 +2,7 @@
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%
-	List<Category> categoryList = (List)request.getAttribute("categoryList");
+	
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,70 +69,63 @@
 				
 					<!-- Main row -->
 					<div class="row">
-						<div class="col">
-							
-							<div class="form-group row">
-								<div class="col">
-									<select class="form-control" name="category_idx">
-										<option value="0">카테고리 선택</option>
-										<%for(Category category : categoryList){ %>
-										<option value="<%=category.getCategory_idx()%>"><%=category.getCategory_name() %></option>
-										<%} %>
-									</select>
-								</div>
-							</div>							
-							
-							<div class="form-group row">
-								<div class="col">
-									<input type="email" class="form-control" name="product_name" placeholder="상품명">
-								</div>
-							</div>							
-							<div class="form-group row">
-								<div class="col">
-									<input type="email" class="form-control" name="brand" placeholder="브랜드명">
-								</div>
-							</div>							
-							<div class="form-group row">
-								<div class="col">
-									<input type="number" class="form-control" name="price">
-								</div>
-							</div>					
-									
-							<div class="form-group row">
-								<div class="col">
-									<input type="number" class="form-control" name="discount">
-								</div>
-							</div>
-								
-							<div class="form-group row">
-								<div class="col">
-									<input type="file" class="form-control" name="file" multiple>
-								</div>
-							</div>
-							
-							<div class="form-group row">
-								<div class="col">
-									<template v-for="json in imageList">
-										<imagebox :key="json.key" :obj="json"/>
-									</template>
-								</div>
-							</div>
-							
-							
-							<div class="form-group row">
-								<div class="col">
-									<textarea class="form-control" id="detail" name="detail"></textarea>
-								</div>
-							</div>
-														
-							<div class="form-group row">
-								<div class="col">
-									<button type="button" class="btn btn-danger" id="bt_regist">등록</button>
-									<button type="button" class="btn btn-danger" id="bt_list">목록</button>									
-								</div>
-							</div>							
-							
-						</div>
+					
+						<div class="col-7">
+						    <div class="card">
+						        <!-- /.card-header -->
+					        	
+					        	
+						        <div class="card-body table-responsive p-0">
+						            <table class="table table-hover text-nowrap">
+						                <tbody>
+											<tr>
+												<td colspan="2">
+									        		<div class="form-group row">
+									        			<div class="col-sm-9">
+										                    <input type="text" name="table_search" class="form-control" placeholder="Search">
+									        			</div>
+									        			<div class="col-sm-3">
+										                    <button type="button" class="btn btn-danger">등록</button>
+									        			</div>
+									        		</div>
+												</td>
+											</tr>						                
+						                    <tr>
+						                        <td>183</td>
+						                        <td>John Doe</td>
+						                    </tr>
+						                </tbody>
+						            </table>
+						        </div>
+						        
+						        
+						        <!-- /.card-body -->
+						    </div>
+						    <!-- /.card -->
+						</div>					
+					
+					
+						<div class="col-5">
+						    <div class="card">
+						    
+						        <div class="card-body">
+					        		<div class="form-group row">
+					        			<div class="col-6">
+						                    <input type="text" name="table_search" class="form-control" >
+					        			</div>
+					        			<div class="col-3">
+						                    <button type="button" class="btn btn-danger">수정</button>
+					        			</div>
+					        			<div class="col-3">
+						                    <button type="button" class="btn btn-danger">삭제</button>
+					        			</div>
+					        		</div>
+						        </div>
+						        
+						    </div>
+						</div>					
+					
+					
 					</div>
 					<!-- /.row (main row) -->
 				</div>
