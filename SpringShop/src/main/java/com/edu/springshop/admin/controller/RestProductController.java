@@ -33,8 +33,7 @@ public class RestProductController {
 	
 	//상품 등록 요청 처리
 	@RequestMapping(value="/product", method=RequestMethod.POST)
-	public Message regist(Product product, HttpServletRequest request) {
-		
+	public ResponseEntity<Message> regist(Product product, HttpServletRequest request) {
 		//웹환경과 관련된 코드 이므로, 컨트롤러의 책임이다!!
 		//왜?? 모델은 중립적이니깐...관심도없다
 		ServletContext application=request.getSession().getServletContext();
@@ -44,8 +43,11 @@ public class RestProductController {
 		//3단계 
 		productService.regist(product, path);
 		
+		Message message = new Message();
+		message.setMsg("상품등록 성공");
 		
-		return null;
+		ResponseEntity entity = new ResponseEntity<Message>(message, HttpStatus.OK);
+		return entity;
 	}
 
 	@ExceptionHandler(UploadException.class)
