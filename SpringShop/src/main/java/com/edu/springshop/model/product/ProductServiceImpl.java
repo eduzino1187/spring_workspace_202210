@@ -27,14 +27,12 @@ public class ProductServiceImpl implements ProductService{
 	
 	@Override
 	public List selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return productDAO.selectAll();
 	}
 
 	@Override
 	public Product select(int product_idx) {
-		// TODO Auto-generated method stub
-		return null;
+		return productDAO.select(product_idx);
 	}
 
 	@Override
@@ -54,14 +52,11 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public void update(Product product) {
-		// TODO Auto-generated method stub
-		
+		productDAO.update(product);
 	}
 
 	@Override
 	public void delete(int product_idx) {
-		// TODO Auto-generated method stub
-		
+		productDAO.delete(product_idx);
 	}
-	
 }

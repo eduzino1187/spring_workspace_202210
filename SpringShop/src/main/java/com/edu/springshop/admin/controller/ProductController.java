@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.edu.springshop.domain.Product;
 import com.edu.springshop.model.category.CategoryService;
 import com.edu.springshop.model.product.ProductService;
 
@@ -45,8 +46,26 @@ public class ProductController {
 		return mav;
 	}
 	
+	//상세보기 요청 
+	@GetMapping("/product/detail")
+	public ModelAndView getDetail(int product_idx) {
+		//3단계 
+		List categoryList = categoryService.selectAll();
+		Product product=productService.select(product_idx);
+		
+		ModelAndView mav = new ModelAndView("admin/product/detail");
+		mav.addObject("categoryList", categoryList);
+		mav.addObject("product", product);
+		
+		return mav;
+	}
 	
 }
+
+
+
+
+
 
 
 
