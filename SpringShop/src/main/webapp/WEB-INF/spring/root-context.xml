@@ -67,7 +67,10 @@
 			<beans:value>application/json;charset=utf-8</beans:value>		 	
 		 </beans:property>	
 	</beans:bean>	
-
+	
+	<beans:bean 
+		id="fileManager" 
+		class="com.edu.springshop.util.FileManager"/>
 
 							 
 </beans>
