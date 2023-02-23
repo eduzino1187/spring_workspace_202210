@@ -30,7 +30,7 @@ public class MybatisCategoryDAO implements CategoryDAO{
 	@Override
 	public void insert(Category category) throws CategoryException{
 		int result=sqlSessionTemplate.insert("Category.insert", category);
-		result=0;
+		
 		if(result <1) {
 			throw new CategoryException("카테고리 등록실패");
 		}

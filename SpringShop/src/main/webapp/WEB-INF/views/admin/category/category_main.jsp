@@ -153,7 +153,7 @@
 			template:`
 				<tr>
 					<td>{{category.category_idx}}</td>
-					<td>{{category.category_name}}</td>					
+					<td><a href="#">{{category.category_name}}</a></td>					
 				</tr>
 			`,
 			props:["obj"],
@@ -189,6 +189,7 @@
 				//서버로부터 전송된 HTTP 응답 헤더 정보가 성공일때 반응
 				success:function(result, status, xhr){
 					alert(result.msg); // {code:,  msg:"성공"}
+					getCategoryList();
 				},
 				
 				//서버로부터 전송된 HTTP 응답 헤더 정보가 실패일때 반응
