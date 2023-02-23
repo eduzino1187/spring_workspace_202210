@@ -5,7 +5,7 @@
 <script src="/resources/shop/js/jquery-ui.min.js"></script>
 <script src="/resources/shop/js/mixitup.min.js"></script>
 <script src="/resources/shop/js/jquery.countdown.min.js"></script>
-<script src="/resources/shop/resources/shop/js/jquery.slicknav.js"></script>
+<script src="/resources/shop/js/jquery.slicknav.js"></script>
 <script src="/resources/shop/js/owl.carousel.min.js"></script>
 <script src="/resources/shop/js/jquery.nicescroll.min.js"></script>
 <script src="/resources/shop/js/main.js"></script>
