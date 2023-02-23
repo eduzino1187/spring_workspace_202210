@@ -1,5 +1,7 @@
 package com.edu.springshop.domain;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -13,8 +15,9 @@ public class Product {
 	private int discount;
 	private String detail;
 	private Category category; //fk
+	private List<Pimg> pimgList;
+	private MultipartFile[] photo; //html에서 전송되는 파라미터명과 일치..
 	
-	private MultipartFile[] photo;
 	
 }
 
