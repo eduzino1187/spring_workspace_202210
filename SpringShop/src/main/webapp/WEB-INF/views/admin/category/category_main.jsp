@@ -240,8 +240,11 @@
 		
 		//비동기방식의 수정 요청 
 		function editAsync(){
-			//전송 데이터를 ajax의 형식으로 전송 
+			if(!confirm("수정하시겠습니까?")){
+				return;
+			}
 			
+			//전송 데이터를 ajax의 형식으로 전송 
 			let json={};
 			json['category_idx']=$("#form2 input[name='category_idx']").val();
 			json['category_name']=$("#form2 input[name='category_name']").val();
@@ -257,12 +260,32 @@
 				processData:false, /*query string화 여부*/
 				success:function(result, status, xhr){
 					console.log(result);
+					
+					//다시 목록 갱신 
+					
 				},
 				error:function(xhr, status, err){
 					
 				}
 			});
 			
+		}
+		
+		function delAsync(){
+			if(!confirm("삭제하시겠습니까?")){
+				return;
+			}	
+			
+			$.ajax({
+				url:"/admin/rest/category/"+$("#form2 input[name='category_idx']").val(),
+				type:"DELETE",
+				success:function(result, status, xhr){
+					getCategoryList();
+				},
+				error:function(xhr, status, err){
+					
+				}
+			});
 		}
 		
 		
@@ -281,7 +304,7 @@
 				editAsync();
 			});
 			$("#bt_del").click(function(){
-				del();
+				delAsync();
 			});
 			
 		});
