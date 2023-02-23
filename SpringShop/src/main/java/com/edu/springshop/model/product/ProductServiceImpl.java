@@ -45,15 +45,11 @@ public class ProductServiceImpl implements ProductService{
 		//파일저장 
 		fileManager.save(product, dir);
 		
+		List<Pimg> pImgList=product.getPimgList();
 		
-		//이미지 저장 (Pimg)
-		MultipartFile[] photoList=product.getPhoto();
-		for(MultipartFile photo : photoList) {
-			Pimg pimg = new Pimg();
-			
-			//pimgDAO.insert(pimg);
-		}
-		
+		for(Pimg pimg : pImgList) {
+			pimgDAO.insert(pimg);
+		}		
 	}
 
 	@Override

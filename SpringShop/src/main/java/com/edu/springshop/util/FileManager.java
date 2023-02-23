@@ -28,9 +28,11 @@ public class FileManager {
 	public void save(Product product, String dir) throws UploadException{
 		MultipartFile[] photoList=product.getPhoto();
 		
+		//비어있는 리스트 만들어주기 
 		List<Pimg> pimgList = new ArrayList<Pimg>();
 		product.setPimgList(pimgList);
 		
+		//그리고 난 다음, 
 		try {
 			for(MultipartFile photo : photoList) {
 				
