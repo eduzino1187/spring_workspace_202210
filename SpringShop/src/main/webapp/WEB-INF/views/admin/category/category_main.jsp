@@ -240,19 +240,23 @@
 		
 		//비동기방식의 수정 요청 
 		function editAsync(){
-			//기존폼을 쿼리스트링 문자열로 변환 
-			$("#form2 input[name='_method']").val("PUT");
-			let formData = $("#form2").serialize();
+			//전송 데이터를 ajax의 형식으로 전송 
 			
-			console.log("생성된 쿼리스트링은 ", formData);
-			
+			let json={};
+			json['category_idx']=$("#form2 input[name='category_idx']").val();
+			json['category_name']=$("#form2 input[name='category_name']").val();
 			
 			$.ajax({
 				url:"/admin/rest/category",
-				type:"POST",
-				data:formData,
+				type:"PUT",
+				contentType:"application/json;charset=utf-8", /*header 정보구성*/
+				//웹상의 데이터 교환시 데이터형식은 무조건, 문자열이 되어야 한다..
+				//따라서 자바스크립트 내장객체인 json 자체는 전송대상이 될수 없다. 
+				//해결책: 문자열화 시키되 개발자가 일일이 수작업으로 하지말고, JSON.stringify()이용
+				data:JSON.stringify(json), /*body 정보구성*/
+				processData:false, /*query string화 여부*/
 				success:function(result, status, xhr){
-					
+					console.log(result);
 				},
 				error:function(xhr, status, err){
 					
