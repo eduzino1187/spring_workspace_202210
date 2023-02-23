@@ -110,17 +110,21 @@
 						    <div class="card">
 						    
 						        <div class="card-body">
+						        	<form id="form2">
+						        	<input type="hidden" name="_method">
+						        	<input type="hidden" name="category_idx">
 					        		<div class="form-group row">
 					        			<div class="col-6">
-						                    <input type="text" name="table_search" class="form-control" >
+						                    <input type="text" name="category_name" class="form-control" >
 					        			</div>
 					        			<div class="col-3">
-						                    <button type="button" class="btn btn-danger">수정</button>
+						                    <button type="button" class="btn btn-danger" id="bt_edit">수정</button>
 					        			</div>
 					        			<div class="col-3">
-						                    <button type="button" class="btn btn-danger">삭제</button>
+						                    <button type="button" class="btn btn-danger" id="bt_del">삭제</button>
 					        			</div>
 					        		</div>
+					        		</form>
 						        </div>
 						        
 						    </div>
@@ -153,7 +157,7 @@
 			template:`
 				<tr>
 					<td>{{category.category_idx}}</td>
-					<td><a href="#">{{category.category_name}}</a></td>					
+					<td @click="getDetail(category)"><a href="#">{{category.category_name}}</a></td>					
 				</tr>
 			`,
 			props:["obj"],
@@ -161,7 +165,15 @@
 				return{
 					category:this.obj
 				};
+			},
+			methods:{
+				getDetail:function(category){
+					//우측 상세보기 영역에 데이터 출력 
+					$("#form2 input[name='category_idx']").val(category.category_idx);//category_idx
+					$("#form2 input[name='category_name']").val(category.category_name);//category_name
+				}
 			}
+			
 		};
 		
 		app1=new Vue({
@@ -212,6 +224,44 @@
 			});			
 		}
 		
+		//수정요청 
+		//html의 form 태그는 GET/POST 만 지원...
+		function edit(){
+			//히든에 들어있는  _method 값을  PUT으로 놓자 
+			$("#form2 input[name='_method']").val("PUT");
+			
+			$("#form2").attr({
+				action:"/admin/category/edit",
+				method:"POST"
+			});
+			$("#form2").submit();
+		}
+		
+		
+		//비동기방식의 수정 요청 
+		function editAsync(){
+			//기존폼을 쿼리스트링 문자열로 변환 
+			$("#form2 input[name='_method']").val("PUT");
+			let formData = $("#form2").serialize();
+			
+			console.log("생성된 쿼리스트링은 ", formData);
+			
+			
+			$.ajax({
+				url:"/admin/rest/category",
+				type:"POST",
+				data:formData,
+				success:function(result, status, xhr){
+					
+				},
+				error:function(xhr, status, err){
+					
+				}
+			});
+			
+		}
+		
+		
 		//서머노트 적용하기 
 		$(function(){
 			
@@ -221,6 +271,13 @@
 			//등록 이벤트 연결 
 			$("#bt_regist").click(function(){
 				regist();
+			});
+			$("#bt_edit").click(function(){
+				//edit();
+				editAsync();
+			});
+			$("#bt_del").click(function(){
+				del();
 			});
 			
 		});
