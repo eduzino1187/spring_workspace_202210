@@ -4,10 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.edu.springshop.domain.Pimg;
 import com.edu.springshop.domain.Product;
+import com.edu.springshop.exception.PimgException;
+import com.edu.springshop.exception.ProductException;
+import com.edu.springshop.exception.UploadException;
 import com.edu.springshop.util.FileManager;
 
 @Service
@@ -35,8 +39,8 @@ public class ProductServiceImpl implements ProductService{
 		return productDAO.select(product_idx);
 	}
 
-	@Override
-	public void regist(Product product, String dir) {
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void regist(Product product, String dir) throws ProductException, UploadException, PimgException{
 		//상품저장 (부모 Product)
 		productDAO.insert(product);//select-key에 의해 pk존재하게 됨
 		

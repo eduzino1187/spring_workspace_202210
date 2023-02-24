@@ -255,6 +255,15 @@
 				contentType:false, /* application/x-www-form~~ 사용여부*/
 				success:function(result, status, xhr){
 					alert(result.msg);
+				},
+				error:function(xhr, status, err){
+					console.log("xhr", xhr);
+					console.log("status", status);
+					console.log("err", err);
+					
+					//JSON.stringify()   json --> string  왜 바꿨나? 전송할려고...,
+					let json=JSON.parse(xhr.responseText);  //string --> json
+					alert(json.msg);
 				}
 			});
 			
