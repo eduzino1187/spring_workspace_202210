@@ -10,7 +10,7 @@
 <%@ include file="./inc/header.jsp" %>
 </head>
 
-<body>
+<body id="app1">
     <!-- Page Preloder -->
 	<%@ include file="./inc/preloader.jsp" %>
 
@@ -86,7 +86,7 @@
                                     <input type="text" value="1">
                                 </div>
                             </div>
-                            <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <a href="javascript:addCart()" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
                             <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
@@ -325,28 +325,13 @@
 <%@ include file="./inc/footer_link.jsp" %>
 <script type="text/javascript">
 
-function addCart(product_idx){
-	<%if(session.getAttribute("member")==null){%>
-		alert("로그인이 필요한 서비스입니다");
-	<%}else{ //로그인 한 경우 %>
-		//비동기 요청으로 서버에 장바구니 담기 요청을 시도하자!
-		$.ajax({
-			url:"/payment/cart.jsp?product_idx="+product_idx,
-			type:"GET",
-			success:function(result, stauts, xhr){
-				alert(result);
-			}
-		});
-	<%}%>
-}
-
-//카테고리 선택시 하위 상품 요청하기
-function getProductList(category_idx){
-	$(location).attr("href", "/shop.jsp?category_idx="+category_idx);	
+//장바구니에 상품 추가하기
+function addCart(){
+		
 }
 
 $(function(){
-	
+	init();
 });
 </script>
 </body>

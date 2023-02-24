@@ -37,11 +37,8 @@
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-
                             <a href="/member/loginform.jsp">Login</a>
                             <a href="/member/joinform.jsp">Register</a>
-                            <a href="/member/logout.jsp">logout</a>
-
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
