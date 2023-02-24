@@ -26,7 +26,7 @@ public class MybatisPimgDAO implements PimgDAO{
 
 	public void insert(Pimg pimg) throws PimgException{
 		int result=sqlSessionTemplate.insert("Pimg.insert", pimg);
-		result=0;
+		
 		if(result <1) {
 			throw new PimgException("이미지 등록실패");
 		}
