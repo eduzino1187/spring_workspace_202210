@@ -1,7 +1,8 @@
+<%@page import="com.edu.springshop.domain.Pimg"%>
 <%@page import="com.edu.springshop.domain.Product"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%
-	List<Product> productList=(List)request.getAttribute("productList");
+	Product product = (Product)request.getAttribute("product");
 %>
 <!DOCTYPE html>
 <html lang="zxx">
@@ -49,32 +50,24 @@
                 <div class="col-lg-6">
                     <div class="product__details__pic">
                         <div class="product__details__pic__left product__thumb nice-scroll">
+							<%List<Pimg> pimgList = product.getPimgList(); %>
+							<%for(int i=0;i<pimgList.size();i++){ %>
+							<%Pimg pimg=pimgList.get(i); %>
                             <a class="pt active" href="#product-1">
-                                <img src="img/product/details/thumb-1.jpg" alt="">
+                                <img src="/resources/data/<%=pimg.getFilename() %>" alt="">
                             </a>
-                            <a class="pt" href="#product-2">
-                                <img src="img/product/details/thumb-2.jpg" alt="">
-                            </a>
-                            <a class="pt" href="#product-3">
-                                <img src="img/product/details/thumb-3.jpg" alt="">
-                            </a>
-                            <a class="pt" href="#product-4">
-                                <img src="img/product/details/thumb-4.jpg" alt="">
-                            </a>
+							<%} %>
                         </div>
                         <div class="product__details__slider__content">
                             <div class="product__details__pic__slider owl-carousel">
                                 <img data-hash="product-1" class="product__big__img" src="img/product/details/product-1.jpg" alt="">
-                                <img data-hash="product-2" class="product__big__img" src="img/product/details/product-3.jpg" alt="">
-                                <img data-hash="product-3" class="product__big__img" src="img/product/details/product-2.jpg" alt="">
-                                <img data-hash="product-4" class="product__big__img" src="img/product/details/product-4.jpg" alt="">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <h3>Essential structured blazer <span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
+                        <h3><%=product.getProduct_name() %> <span>Brand: <%=product.getBrand()  %></span></h3>
                         <div class="rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
