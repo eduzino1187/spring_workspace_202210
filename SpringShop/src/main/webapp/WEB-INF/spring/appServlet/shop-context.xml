@@ -41,17 +41,39 @@
 		class="com.edu.springshop.school.Student"/>
 		
 	<!-- 관점(Aspect)을 정의하자 -->
+	<!-- 	
 	<aop:config>
 		<aop:aspect ref="bell" id="bellAspect">
-			<!-- 지점  등록 -->
+			지점  등록
 			<aop:pointcut expression="execution(public * com.edu.springshop.school.Student..*(..))" id="bellPointcut"/>
 			
-			<!-- 시점 등록, 어느지점에 어느시점에 관여할지.. -->
+			시점 등록, 어느지점에 어느시점에 관여할지..
 			<aop:before method="ding" pointcut-ref="bellPointcut"/>
 		</aop:aspect>
 	</aop:config>		
-	
+ 	-->
+ 	
+ 	<!-- 쇼핑몰 카테고리 가져오기 관점 정의 -->
+ 	<aop:config>
+		<aop:aspect ref="categoryAdvice" id="categoryAspect">
+			<aop:pointcut expression="execution(public * com.edu.springshop.shop.controller..*(..))" id="categoryPointcut"/>
+			<aop:around method="getCategoryList" pointcut-ref="categoryPointcut"/>				
+		</aop:aspect> 	 	
+ 	</aop:config>
+ 		
 </beans:beans>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
