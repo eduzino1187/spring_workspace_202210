@@ -1,4 +1,10 @@
+<%@page import="com.edu.springshop.domain.Category"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+	<%
+		//카테고리 목록 가져오기
+		List<Category> categoryList=(List)request.getAttribute("categoryList");
+	%>
     <header class="header">
         <div class="container-fluid">
             <div class="row">
@@ -11,10 +17,10 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="./index.html">Home</a></li>
-                            <%//for(int i=0;i<categoryList.size();i++){ %>
-                            <%// Category category=categoryList.get(i);%>
-                            <li><a href="#"><%//=category.getCategory_name() %></a></li>
-                            <%//} %>
+                            <%for(int i=0;i<categoryList.size();i++){ %>
+                            <%Category category=categoryList.get(i);%>
+                            <li><a href="#"><%=category.getCategory_name() %></a></li>
+                            <%} %>
                             
                             <li><a href="/shop.jsp">Shop</a></li>
                             <li><a href="#">Pages</a>

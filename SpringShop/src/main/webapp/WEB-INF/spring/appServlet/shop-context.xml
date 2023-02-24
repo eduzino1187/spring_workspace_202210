@@ -3,7 +3,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	
+	
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
@@ -23,10 +28,25 @@
 	
 	<context:component-scan base-package="com.edu.springshop.shop.controller" />
 	
+	<!-- 공통관심 사항인 Bell을  Advice로 등록하자 -->
+	<beans:bean id="bell" class="com.edu.springshop.aop.Bell"/>
+	
+	
 	<!-- 학생을 등록한다  -->
 	<beans:bean
 		id="student" 
 		class="com.edu.springshop.school.Student"/>
+		
+	<!-- 관점(Aspect)을 정의하자 -->
+	<aop:config>
+		<aop:aspect ref="bell" id="bellAspect">
+			<!-- 지점  등록 -->
+			<aop:pointcut expression="execution(public * com.edu.springshop.school.Student..*(..))" id="bellPointcut"/>
+			
+			<!-- 시점 등록, 어느지점에 어느시점에 관여할지.. -->
+			<aop:before method="ding" pointcut-ref="bellPointcut"/>
+		</aop:aspect>
+	</aop:config>		
 	
 </beans:beans>
 
