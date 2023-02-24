@@ -22,7 +22,7 @@
                             <li><a href="#"><%=category.getCategory_name() %></a></li>
                             <%} %>
                             
-                            <li><a href="/shop.jsp">Shop</a></li>
+                            <li><a href="/shop/list">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./product-details.html">Product Details</a></li>
@@ -31,8 +31,6 @@
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>

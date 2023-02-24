@@ -31,6 +31,9 @@
 	<!-- 공통관심 사항인 Bell을  Advice로 등록하자 -->
 	<beans:bean id="bell" class="com.edu.springshop.aop.Bell"/>
 	
+	<!-- 공통관심 사항인 CategoryAdivce를  Advice로 등록하자 -->
+	<beans:bean id="categoryAdvice" 
+		class="com.edu.springshop.aop.CategoryAdvice"/>
 	
 	<!-- 학생을 등록한다  -->
 	<beans:bean

@@ -1,39 +1,17 @@
-<%@page import="org.apache.ibatis.session.SqlSession"%>
-<%@page import="com.jspshop.domain.Product"%>
-<%@page import="com.jspshop.mybatis.MybatisConfig"%>
-<%@page import="com.jspshop.repository.ProductDAO"%>
-<%@page import="com.jspshop.domain.Category"%>
-<%@page import="java.util.List"%>
-<%@page import="com.jspshop.repository.CategoryDAO"%>
+<%@page import="com.edu.springshop.domain.Product"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%!
-	MybatisConfig mybatisConfig =MybatisConfig.getInstance();
-	ProductDAO productDAO = new ProductDAO();
-%>
 <%
-	//상품 DAO는 트랜잭션 때문에, SqlSession을 멤버변수로 두고,  setter로 
-	//주입받기를 기다리고 있으므로... (세션 주입)
-	SqlSession sqlSession = mybatisConfig.getSqlSession();
-	productDAO.setSqlSession(sqlSession);
-
-	//사용자가 넘긴 상위 카테고리를 이용하여, 소속된 상품 가져오기 
-	String category_idx=request.getParameter("category_idx");
-	if(category_idx==null){
-		category_idx="0";
-	}
-	List<Product> productList=productDAO.selectByCategory(Integer.parseInt(category_idx));
-	
-	
+	List<Product> productList=(List)request.getAttribute("productList");
 %>
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-<%@ include file="/inc/header.jsp" %>
+<%@ include file="./inc/header.jsp" %>
 </head>
 
 <body>
     <!-- Page Preloder -->
-	<%@ include file="/inc/preloader.jsp" %>
+	<%@ include file="./inc/preloader.jsp" %>
 
     <!-- Offcanvas Menu Begin -->
     <!-- 
@@ -43,11 +21,11 @@
      	非전문가들은 java 코드를 이해할 수 없기 때문에, 그들이 좀더 쉽게
      	다가갈 수 있도록 태그를 지원해준다 ( 협업 때문에 )
      -->
-	<%@ include file="/inc/main_navi.jsp"%>    
+	<%@ include file="./inc/main_navi.jsp"%>    
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
-    <%@ include file="/inc/header_section.jsp"%>
+    <%@ include file="./inc/header_section.jsp"%>
     <!-- Header Section End -->
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
@@ -266,19 +244,19 @@
     
     
 	<!-- Instagram Begin -->
-	<%@ include file="/inc/insta.jsp" %>
+	<%@ include file="./inc/insta.jsp" %>
 	<!-- Instagram End -->
 	
 	<!-- Footer Section Begin -->
-	<%@ include file="/inc/footer.jsp" %>
+	<%@ include file="./inc/footer.jsp" %>
 	<!-- Footer Section End -->
 	
 	<!-- Search Begin -->
-	<%@ include file="/inc/search.jsp" %>
+	<%@ include file="./inc/search.jsp" %>
 	<!-- Search End -->
 
 <!-- Js Plugins -->
-<%@ include file="/inc/footer_link.jsp" %>
+<%@ include file="./inc/footer_link.jsp" %>
 <script type="text/javascript">
 
 function addCart(product_idx){
@@ -307,10 +285,6 @@ $(function(){
 </script>
 </body>
 </html>
-<%
-	mybatisConfig.release(sqlSession);
-%>
-
 
 
 
