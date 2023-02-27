@@ -91,8 +91,8 @@
 												</td>
 											</tr>	
 											
-											<template v-for="category in categoryList">					                
-												<row :key="category.category_idx" :obj="category"/>
+											<template v-for="category in categoryList">
+												<row :key="category.category_idx" :obj="category"/>                                       
 						                    </template>
 						                    
 						                </tbody>
