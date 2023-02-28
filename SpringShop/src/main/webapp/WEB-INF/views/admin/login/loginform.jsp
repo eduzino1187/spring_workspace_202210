@@ -16,29 +16,24 @@
 		    </div>
 		    <!-- /.card-header -->
 		    <!-- form start -->
-		    <form class="form-horizontal">
+		    <form class="form-horizontal" id="form1">
 		        <div class="card-body">
 		            <div class="form-group row">
 		                <div class="col">
-		                    <input type="text" class="form-control" placeholder="관리자 ID">
+		                    <input type="text" class="form-control" placeholder="관리자 ID" name="admin_id">
 		                </div>
 		            </div>
 		            <div class="form-group row">
 		                <div class="col">
-		                    <input type="password" class="form-control" placeholder="Password">
-		                </div>
-		            </div>
-		            <div class="form-group row">
-		                <div class="col">
-		                    <input type="text" class="form-control" placeholder="관리자 이름">
+		                    <input type="password" class="form-control" placeholder="Password" name="admin_pass">
 		                </div>
 		            </div>
 
 		        </div>
 		        <!-- /.card-body -->
 		        <div class="card-footer">
-		            <button type="submit" class="btn btn-info">Sign in</button>
-		            <button type="submit" class="btn btn-default float-right">Cancel</button>
+		            <button type="button" class="btn btn-info" id="bt_login">Sign in</button>
+		            <button type="button" class="btn btn-default float-right">Cancel</button>
 		        </div>
 		        <!-- /.card-footer -->
 		    </form>
@@ -47,8 +42,36 @@
 	</div>
 	<!-- ./wrapper -->
 	<%@ include file="../inc/footer_link.jsp" %>
+	<script type="text/javascript">
+		function login(){
+			let formData = $("#form1").serialize(); 
+				
+			$.ajax({
+				url:"/admin/rest/login/admin",
+				type:"POST",
+				data: formData, 
+				success:function(result, status, xhr){
+					alert(result.msg);
+				},
+				error:function(xhr, status, err){
+					let json=JSON.parse(xhr.responseText);
+					alert(json.msg);
+				}
+			});
+		}
+		
+		$(function(){
+			$("#bt_login").click(function(){
+				login();		
+			});
+		});
+	
+	</script>	
 </body>
 </html>
+
+
+
 
 
 
