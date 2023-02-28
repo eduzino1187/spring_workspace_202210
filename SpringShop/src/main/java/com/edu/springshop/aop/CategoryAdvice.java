@@ -23,7 +23,7 @@ public class CategoryAdvice {
 	
 	//아래의 메서드에서 서비스의 selectAll() 을 호출하여 ModelAndView에
 	//저장하자
-	public Object getCategoryList(ProceedingJoinPoint joinPoint) {
+	public Object getCategoryList(ProceedingJoinPoint joinPoint) throws Throwable{
 		//원래 호출하려던 메서들 호출 전, 후에 관여할 수 있는 기능을 지원 
 		
 		String target=joinPoint.getTarget().getClass().getName();

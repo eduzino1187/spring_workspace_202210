@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService{
 		member.setPass(hash); //DTO의 패스워드를 hash 값으로 대체
 		
 		//이메일
-		emailManager.send(member);
+		//emailManager.send(member);
 		
 		//db insert
 		memberDAO.insert(member);
