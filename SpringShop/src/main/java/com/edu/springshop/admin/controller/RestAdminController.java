@@ -40,14 +40,15 @@ public class RestAdminController {
 		return entity;
 	}
 	
+	/*
 	@ExceptionHandler(AdminException.class)
 	public ResponseEntity<Message> handle(AdminException e){
 		Message message = new Message();
 		message.setMsg(e.getMessage());
 		ResponseEntity entity = new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
 		return entity;
-
 	}
+	*/
 }
 
 
