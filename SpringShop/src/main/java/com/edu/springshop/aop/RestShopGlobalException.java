@@ -20,19 +20,39 @@ import com.edu.springshop.util.Message;
 //@RestControllerAdivce자체가 RestController 에서 발생하는 예외만 처리한다는
 //보장을 하지 않는다...
 @RestControllerAdvice(annotations = RestController.class)  //ControllerAdvice + @ResponseBody
-public class RestGlobalException {
+public class RestShopGlobalException {
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
-	@ExceptionHandler(value= {MemberException.class, EmailException.class,HashException.class})
-	public ResponseEntity<Message> handle(RuntimeException e){
-		logger.info("글로벌 예외에서 감지한 회원등록 실패");
+	@ExceptionHandler(HashException.class)
+	public ResponseEntity<Message> handle(HashException e){
 		
 		Message message = new Message();
-		message.setMsg(e.getMessage());
+		message.setMsg("쇼핑몰 글로벌 예외 : "+e.getMessage());
 		
 		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
 		return entity;
 	};
+	
+	@ExceptionHandler(EmailException.class)
+	public ResponseEntity<Message> handle(EmailException e){
+		
+		Message message = new Message();
+		message.setMsg("쇼핑몰 글로벌 예외 : "+e.getMessage());
+		
+		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	};
+	
+	@ExceptionHandler(MemberException.class)
+	public ResponseEntity<Message> handle(MemberException e){
+		
+		Message message = new Message();
+		message.setMsg("쇼핑몰 글로벌 예외 : "+e.getMessage());
+		
+		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+		return entity;
+	};
+
 
 }
 
