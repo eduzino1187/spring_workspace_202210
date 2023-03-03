@@ -23,7 +23,7 @@ public class MemberController {
 	public ModelAndView getJoinForm(HttpServletRequest request) {
 		
 		return new ModelAndView("shop/member/joinform");
-	}
+	} 
 	
 	//로그인 폼 요청처리
 	@GetMapping("/member/loginform")
