@@ -3,11 +3,14 @@ package client.view;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.imageio.stream.FileImageInputStream;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -34,6 +37,7 @@ public class RegistForm extends JFrame{
 	String hypen="--";
 	String boundary="**********";  //하이픈으로 감쌀, 데이터의 경계기준 문자열
 	String line="\r\n";
+	File file; //유저가 전송을 위해 선택한 파일 
 	
 	public RegistForm() {
 		t_category_idx = new JTextField("1", 25);
@@ -91,7 +95,10 @@ public class RegistForm extends JFrame{
 	}
 	
 	public void selectFile() {
+		chooser.showOpenDialog(this);
 		
+		//유저가 선택한 파일 얻기 
+		file=chooser.getSelectedFile();
 	}
 	
 	//text 뿐아니라, 바이너리 파일도 함께 Http방식으로 전송해야 하므로 
@@ -129,10 +136,56 @@ public class RegistForm extends JFrame{
 		ds.writeBytes(line);//값 지정 직후에는 라인으로 또 구분
 		ds.writeBytes(t_product_name.getText()+line);
 		
+		ds.writeBytes(hypen+boundary+line);//시작할때
+		//바디를 구성하는 요소들간에는 줄바꿈으로 구분한다
+		ds.writeBytes("Content-Disposition:form-data;name=\"brand\""+line);
+		ds.writeBytes("Content-Type:text/plaint;charset=UTF-8"+line);
+		ds.writeBytes(line);//값 지정 직후에는 라인으로 또 구분
+		ds.writeBytes(t_brand.getText()+line);
+		
+		ds.writeBytes(hypen+boundary+line);//시작할때
+		//바디를 구성하는 요소들간에는 줄바꿈으로 구분한다
+		ds.writeBytes("Content-Disposition:form-data;name=\"price\""+line);
+		ds.writeBytes("Content-Type:text/plaint;charset=UTF-8"+line);
+		ds.writeBytes(line);//값 지정 직후에는 라인으로 또 구분
+		ds.writeBytes(t_price.getText()+line);
+
+		ds.writeBytes(hypen+boundary+line);//시작할때
+		//바디를 구성하는 요소들간에는 줄바꿈으로 구분한다
+		ds.writeBytes("Content-Disposition:form-data;name=\"discount\""+line);
+		ds.writeBytes("Content-Type:text/plaint;charset=UTF-8"+line);
+		ds.writeBytes(line);//값 지정 직후에는 라인으로 또 구분
+		ds.writeBytes(t_discount.getText()+line);
+		
+		ds.writeBytes(hypen+boundary+line);//시작할때
+		//바디를 구성하는 요소들간에는 줄바꿈으로 구분한다
+		ds.writeBytes("Content-Disposition:form-data;name=\"detail\""+line);
+		ds.writeBytes("Content-Type:text/plaint;charset=UTF-8"+line);
+		ds.writeBytes(line);//값 지정 직후에는 라인으로 또 구분
+		ds.writeBytes(t_detail.getText()+line);
+		
+		//파일 파라미터 처리 
+		ds.writeBytes(hypen+boundary+line);//시작할때
+		ds.writeBytes("Content-Disposition:form-data;name=\"photo\";filename=\""+file.getName()+"\""+line);
+		ds.writeBytes("Content-Type:image/jpeg"+line);//파일의 종류,형식
+		ds.writeBytes(line);
+		
+		//파일쪼개서 전송 
+		FileInputStream fis=new FileInputStream(file);
+		byte[] buff=new byte[1024];
+		
+		int data=-1;
+		while(true) {
+			data=fis.read(buff);
+			if(data==-1)break;
+			ds.write(buff);
+		}
+		
 		//전송 
 		ds.writeBytes(line);
 		ds.writeBytes(hypen+boundary+hypen+line);//끝맺을때...
-		ds.flush(); //버퍼처리된 출력스트림의 경우  flush()가 사용됨 
+		ds.flush(); //버퍼처리된 출력스트림의 경우  flush()가 사용됨
+		fis.close();
 		ds.close();
 		
 		//웹서버부터 받은 http 상태코드로 성공여부를 따져보자 
