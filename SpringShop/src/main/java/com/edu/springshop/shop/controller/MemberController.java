@@ -42,4 +42,19 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView("redirect:/member/loginform");
 		return mav;
 	}
+	
+	//상담게시판 페이지 요청 처리 
+	@GetMapping("/member/chatform")
+	public ModelAndView getChatForm(HttpServletRequest request){
+		ModelAndView mav=new ModelAndView("shop/member/chat");
+		return mav;
+	}
+	
 }
+
+
+
+
+
+
+
