@@ -86,6 +86,24 @@
 		</websocket:handshake-interceptors>				
 	</websocket:handlers> 
  	
+ 	<!-- 구글 로그인 관련 정보 등록  -->
+ 	<beans:bean id="googleConnectionFactory" class="org.springframework.social.google.connect.GoogleConnectionFactory">
+		<!-- google cloud platform에서 발급받은 client ID-->
+		<beans:constructor-arg value="665827200546-8k1a3glsdcrlngbecjbbc55k1t1vp7kr.apps.googleusercontent.com"/>
+		
+		<!-- google cloud platform에서 발급받은 client Secret--> 		
+		<beans:constructor-arg value="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"/> 		
+ 	</beans:bean>
+	
+	<beans:bean class="org.springframework.social.oauth2.OAuth2Parameters">
+		<!-- Resource Owner 로부터 어떠한 정보를 수집할지 그 범위설정  -->
+		<beans:property name="scope" value="https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"/>
+		
+		<!-- Resource Owner 가 인증할때, 콜백받을 우리 웹사이트 URI -->
+		<beans:property name="redirectUri" value="http://localhost:7777/member/auth/google"/>
+	</beans:bean>
+ 	
+ 	<beans:bean id="googleLogin" class="com.edu.springshop.sns.GoogleLogin"/>
  	
 </beans:beans>
 

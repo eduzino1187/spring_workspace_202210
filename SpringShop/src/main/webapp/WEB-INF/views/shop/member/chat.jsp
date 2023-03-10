@@ -94,6 +94,8 @@ function connect(){
 function sendMsg(){
 	let msg = $("#t_send").val();
 	ws.send(msg);
+	
+	$("#t_send").val("");//입력값 초기화
 }
 
 $(function(){

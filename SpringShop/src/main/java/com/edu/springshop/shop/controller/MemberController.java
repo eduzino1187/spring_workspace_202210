@@ -32,6 +32,8 @@ public class MemberController {
 		return new ModelAndView("shop/member/loginform");
 	}
 	
+	
+	
 	//회원가입 요청 처리 
 	//HttpServletRequest를 넣어야 하는이유?  AOP적용을 위한 CategoryAdvice 코드에
 	//요청을 낚아채어, request 를 사용중이므로...

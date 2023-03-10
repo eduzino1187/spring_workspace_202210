@@ -5,12 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.springshop.domain.Member;
 import com.edu.springshop.model.member.MemberService;
+import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.util.Message;
 
 @RestController
@@ -19,6 +21,9 @@ public class RestMemberController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private GoogleLogin googleLogin;
 	
 	//회원가입 요청 처리 
 	@PostMapping("/member")
@@ -31,6 +36,19 @@ public class RestMemberController {
 		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.OK);
 		return entity;
 	} 
+	
+	@GetMapping("/member/authform/google")
+	public ResponseEntity<Message> getUrl(HttpServletRequest request, Member member){
+		//사용자가 보게될 인증화면에 대한 주소 구하기 
+		String url = googleLogin.handle();
+		
+		Message message = new Message();
+		message.setMsg(url);
+		
+		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.OK);
+		return entity;
+	} 
+
 	
 	/*
 	@ExceptionHandler(HashException.class)
