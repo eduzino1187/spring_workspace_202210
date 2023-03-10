@@ -36,7 +36,7 @@ public class RestMemberController {
 		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.OK);
 		return entity;
 	} 
-	
+	/*
 	@GetMapping("/member/authform/google")
 	public ResponseEntity<Message> getUrl(HttpServletRequest request, Member member){
 		//사용자가 보게될 인증화면에 대한 주소 구하기 
@@ -48,7 +48,7 @@ public class RestMemberController {
 		ResponseEntity entity=new ResponseEntity<Message>(message, HttpStatus.OK);
 		return entity;
 	} 
-
+	 */
 	
 	/*
 	@ExceptionHandler(HashException.class)

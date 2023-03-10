@@ -8,6 +8,9 @@ import org.springframework.social.oauth2.GrantType;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.social.oauth2.OAuth2Parameters;
 
+import lombok.Data;
+
+@Data
 public class GoogleLogin {
 	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	
