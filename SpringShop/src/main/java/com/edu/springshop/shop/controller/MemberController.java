@@ -1,10 +1,13 @@
 package com.edu.springshop.shop.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.google.api.Google;
 import org.springframework.social.oauth2.AccessGrant;
 import org.springframework.social.oauth2.OAuth2Operations;
 import org.springframework.stereotype.Controller;
@@ -73,7 +76,7 @@ public class MemberController {
 	
 	//구글 로그인 콜백
 	@GetMapping("/member/auth/google")
-	public ModelAndView callback(HttpServletRequest request) {
+	public ModelAndView callback(HttpServletRequest request, HttpSession session) {
 		String code = request.getParameter("code");
 		logger.info("구글에서 발급된 코드는 "+code);
 		
@@ -86,6 +89,16 @@ public class MemberController {
 		
 		logger.info("발급받은 토큰은 "+token);
 		
+		Connection con=googleLogin.getGoogleConectionFactory().createConnection(accessGrant);
+		Google google=(Google)con.getApi();
+		
+		
+		/*1) 토큰을 이용하여 사용자의 정보를 접근한다 
+		 *    Google 객체를 얻으면 됨.. (Connection 객체로 얻어온다)
+		 *2) 토큰을 통해 얻은 사용자 정보를 Member DTO에 담는다
+		 *3) session 에  DTO 담아서 로그인 처리를 해준다 ..
+		 *4) 로그인 후 보게될 페이지를 보여준다..(메인..) 
+		*/ 
 		return null;
 	}
 }

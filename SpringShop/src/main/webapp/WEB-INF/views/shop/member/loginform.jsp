@@ -37,7 +37,6 @@
 				        </div>
 				       
 				        <button type="button" class="btn btn-success" id="bt_google">Google로 로그인</button>
-				        <button type="button" class="btn btn-success" id="bt_googleauth">Google인증</button>
 				        
 				        <button type="button" class="btn btn-success" id="bt_naver">Naver로 로그인</button>
 				        <button type="button" class="btn btn-success" id="bt_kakao">KaKao로 로그인</button>
@@ -81,14 +80,7 @@ function regist(){
 
 $(function(){
 	
-	$("#bt_googleauth").click(function(){
-		location.href="<%=request.getAttribute("url")%>";
-	});
-	
 	$("#bt_google").click(function(){
-		location.href="/member/authform/google";
-		
-		/*
 		$.ajax({
 			url:"/member/authform/google",
 			type:"GET", 
@@ -97,7 +89,6 @@ $(function(){
 				location.href=result.msg;//인증화면 주소를 요청		
 			}			
 		});
-		*/
 	});
 	
 });
