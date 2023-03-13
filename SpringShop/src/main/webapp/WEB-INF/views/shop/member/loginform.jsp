@@ -37,9 +37,8 @@
 				        </div>
 				       
 				        <button type="button" class="btn btn-success" id="bt_google">Google로 로그인</button>
-				        
-				        <button type="button" class="btn btn-success" id="bt_naver">Naver로 로그인</button>
 				        <button type="button" class="btn btn-success" id="bt_kakao">KaKao로 로그인</button>
+				        <button type="button" class="btn btn-success" id="bt_naver">Naver로 로그인</button>
 				        
 				        <button type="button" class="btn btn-success" id="bt_login">Login</button>
 				        <button type="button" class="btn btn-success" id="bt_regist">신규가입</button>
@@ -81,14 +80,20 @@ function regist(){
 $(function(){
 	
 	$("#bt_google").click(function(){
+		//SNS 사업자가 미리 만들어놓은 인증화면 주소를 요청해야 한다.
+		//따라서 주소 및, 파라미터명이 이미 정해져 있다..
+		//(어디에서 조사해야 하나? 구글 개발자 사이트에 공시되어 있다..)
+		
 		$.ajax({
-			url:"/member/authform/google",
-			type:"GET", 
+			url:"/rest/member/authform/google",
+			type:"get",
 			success:function(result, status, xhr){
-				console.log(result.msg);
-				location.href=result.msg;//인증화면 주소를 요청		
-			}			
+				console.log("인증주소는 ",  result.msg);
+				location.href=result.msg;
+			}
+			
 		});
+		
 	});
 	
 });
