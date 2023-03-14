@@ -27,6 +27,8 @@ import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.sns.GoogleOAuthToken;
 import com.edu.springshop.sns.KaKaoLogin;
 import com.edu.springshop.sns.KaKaoOAuthToken;
+import com.edu.springshop.sns.NaverLogin;
+import com.edu.springshop.sns.NaverOAuthToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,6 +46,9 @@ public class MemberController {
 	
 	@Autowired
 	private KaKaoLogin kakaoLogin;
+	
+	@Autowired
+	private NaverLogin naverLogin;
 	
 	
 	//회원가입 폼 요청처리
@@ -283,6 +288,121 @@ public class MemberController {
 			//그렇지 않은경우
 			//로그인 처리만 하자 (세션에 담자)
 		}
+		
+		ModelAndView mav = new ModelAndView("redirect:/");
+		
+		return mav;
+	}
+	
+	
+	//Naver 로그인 콜백
+	@GetMapping("/sns/naver/callback")
+	public ModelAndView naverCallback(HttpServletRequest request, HttpSession session) {
+		String code = request.getParameter("code");
+		logger.info("Naver에서 발급된 코드는 "+code);
+		
+		/*-----------------------------------------------------------------
+		 1) 토큰 취득을 위한 POST 헤더와 바디 구성하기 
+		-----------------------------------------------------------------*/
+		
+		String url=naverLogin.getToken_request_url();
+		
+		//body 의 파라미터 구성하기  <파라미터명, 파라미터값>
+		MultiValueMap<String, String> params=new LinkedMultiValueMap<String, String>();
+		params.add("code", code);
+		params.add("client_id", naverLogin.getClient_id());
+		params.add("client_secret", naverLogin.getClient_secret());
+		params.add("redirect_uri", naverLogin.getRedirect_uri());
+		params.add("grant_type", naverLogin.getGrant_type());
+		params.add("state", naverLogin.getState());
+		
+		//post 방식의 헤더 (application/x-www-form-urlencoded)
+		HttpHeaders headers=new HttpHeaders();
+		headers.add("Content-Type", "application/x-www-form-urlencoded");
+		
+		//머리와 몸 합치기 
+		HttpEntity httpEntity=new HttpEntity(params, headers);
+		
+		//요청시도를 위한 객체생성, 비동기방식의 요청을 위한 객체
+		RestTemplate restTemplate=new RestTemplate();
+		ResponseEntity<String> responseEntity=restTemplate.exchange(url,HttpMethod.POST, httpEntity, String.class);
+		
+		
+		/*-----------------------------------------------------------------
+		 2) 토큰 요청후  ResponseEntity로부터 토큰 꺼내기 (String에 불과하므로..)
+		-----------------------------------------------------------------*/
+		String body=responseEntity.getBody();
+		logger.info("naver 에서 넘겨받은 응답정보"+body);
+		
+		//json 으로 되어있는 문자열을 파싱하여, 자바의 객체로 옮겨담자
+		
+		ObjectMapper objectMapper=new ObjectMapper();
+		NaverOAuthToken oAuthToken=null;
+		
+		try {
+			oAuthToken=objectMapper.readValue(body, NaverOAuthToken.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		/*-----------------------------------------------------------------
+		 3) 토큰을 이용하여 회원정보에 접근
+		-----------------------------------------------------------------*/
+		
+		String userinfo_url=naverLogin.getUserinfo_url();
+		
+		//GET방식요청 구성 
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Authorization", "Bearer "+oAuthToken.getAccess_token());
+		HttpEntity entity=new HttpEntity(headers2);
+		
+		//비동기객체를 이용한 GET  요청
+		RestTemplate restTemplate2 = new RestTemplate();
+		ResponseEntity<String> userEntity=restTemplate2.exchange(userinfo_url, HttpMethod.GET, entity, String.class);
+		
+		String userBody = userEntity.getBody();
+		logger.info("회원정보는 "+userBody);
+		
+		
+		HashMap<String, Object> userMap=new HashMap<String, Object>();
+		
+		//사용자 정보 추출하기 
+		ObjectMapper objectMapper2 = new ObjectMapper();
+		try {
+			userMap=objectMapper2.readValue(userBody, HashMap.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		
+		//내부의 json은 맵으로 처리
+		Map response =(Map)userMap.get("response");
+		
+		String  id=(String)response.get("id");
+		String  nickname=(String)response.get("nickname");
+		String  gender=(String)response.get("gender");
+		String  email=(String)response.get("email");
+		String  mobile=(String)response.get("mobile");
+		
+		
+		logger.info("id is "+id);
+		logger.info("nickname is "+nickname);
+		logger.info("gender is "+gender);
+		logger.info("email is "+email);
+		logger.info("mobile is "+mobile);
+		
+		if(false) {
+			//이미 db이 이 회원의 식별고유 id 가 존재할 경우
+			//회원가입을 처리해주자 (서비스의 regist) 세션에 담자 
+		}else {
+			//그렇지 않은경우
+			//로그인 처리만 하자 (세션에 담자)
+		}
+		
 		
 		ModelAndView mav = new ModelAndView("redirect:/");
 		
