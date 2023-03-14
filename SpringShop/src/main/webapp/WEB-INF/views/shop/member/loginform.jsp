@@ -77,25 +77,33 @@ function regist(){
 	$("#form1").submit();
 }
 
+function gotoAuthForm(sns){
+	$.ajax({
+		url:"/rest/member/authform/"+sns,
+		type:"get",
+		success:function(result, status, xhr){
+			console.log("인증주소는 ",  result.msg);
+			location.href=result.msg;
+		}
+	});	
+}
+
 $(function(){
 	
 	$("#bt_google").click(function(){
 		//SNS 사업자가 미리 만들어놓은 인증화면 주소를 요청해야 한다.
 		//따라서 주소 및, 파라미터명이 이미 정해져 있다..
 		//(어디에서 조사해야 하나? 구글 개발자 사이트에 공시되어 있다..)
-		
-		$.ajax({
-			url:"/rest/member/authform/google",
-			type:"get",
-			success:function(result, status, xhr){
-				console.log("인증주소는 ",  result.msg);
-				location.href=result.msg;
-			}
-			
-		});
-		
+		gotoAuthForm("google");		
 	});
 	
+	$("#bt_kakao").click(function(){
+		gotoAuthForm("kakao");		
+	});
+	
+	$("#bt_naver").click(function(){
+		gotoAuthForm("naver");		
+	});
 });
 </script>
 </body>

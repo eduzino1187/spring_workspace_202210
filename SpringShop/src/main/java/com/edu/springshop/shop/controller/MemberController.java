@@ -1,6 +1,7 @@
 package com.edu.springshop.shop.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,8 @@ import com.edu.springshop.domain.Member;
 import com.edu.springshop.model.member.MemberService;
 import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.sns.GoogleOAuthToken;
+import com.edu.springshop.sns.KaKaoLogin;
+import com.edu.springshop.sns.KaKaoOAuthToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +41,10 @@ public class MemberController {
 	
 	@Autowired
 	private GoogleLogin googleLogin;
+	
+	@Autowired
+	private KaKaoLogin kakaoLogin;
+	
 	
 	//회원가입 폼 요청처리
 	@GetMapping("/member/joinform")
@@ -76,7 +83,7 @@ public class MemberController {
 	
 	//구글 로그인 콜백
 	@GetMapping("/sns/google/callback")
-	public ModelAndView callback(HttpServletRequest request, HttpSession session) {
+	public ModelAndView googleCallback(HttpServletRequest request, HttpSession session) {
 		String code = request.getParameter("code");
 		logger.info("구글에서 발급된 코드는 "+code);
 		
@@ -178,6 +185,111 @@ public class MemberController {
 		
 		return mav;
 	}
+
+	//카카오 로그인 콜백
+	@GetMapping("/sns/kakao/callback")
+	public ModelAndView kakaoCallback(HttpServletRequest request, HttpSession session) {
+		String code = request.getParameter("code");
+		logger.info("카카오에서 발급된 코드는 "+code);
+		
+		/*-----------------------------------------------------------------
+		 1) 토큰 취득을 위한 POST 헤더와 바디 구성하기 
+		-----------------------------------------------------------------*/
+		
+		String url=kakaoLogin.getToken_request_url();
+		
+		//body 의 파라미터 구성하기  <파라미터명, 파라미터값>
+		MultiValueMap<String, String> params=new LinkedMultiValueMap<String, String>();
+		params.add("code", code);
+		params.add("client_id", kakaoLogin.getClient_id());
+		params.add("redirect_uri", kakaoLogin.getRedirect_uri());
+		params.add("grant_type", kakaoLogin.getGrant_type());
+		
+		//post 방식의 헤더 (application/x-www-form-urlencoded)
+		HttpHeaders headers=new HttpHeaders();
+		headers.add("Content-Type", "application/x-www-form-urlencoded");
+		
+		//머리와 몸 합치기 
+		HttpEntity httpEntity=new HttpEntity(params, headers);
+		
+		//요청시도를 위한 객체생성, 비동기방식의 요청을 위한 객체
+		RestTemplate restTemplate=new RestTemplate();
+		ResponseEntity<String> responseEntity=restTemplate.exchange(url,HttpMethod.POST, httpEntity, String.class);
+		
+
+		/*-----------------------------------------------------------------
+		 2) 토큰 요청후  ResponseEntity로부터 토큰 꺼내기 (String에 불과하므로..)
+		-----------------------------------------------------------------*/
+		String body=responseEntity.getBody();
+		logger.info("카카오에서 넘겨받은 응답정보"+body);
+		
+		//json 으로 되어있는 문자열을 파싱하여, 자바의 객체로 옮겨담자
+		ObjectMapper objectMapper=new ObjectMapper();
+		KaKaoOAuthToken oAuthToken=null;
+		
+		try {
+			oAuthToken=objectMapper.readValue(body, KaKaoOAuthToken.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		
+		/*-----------------------------------------------------------------
+		 3) 토큰을 이용하여 회원정보에 접근
+		-----------------------------------------------------------------*/
+		
+		String userinfo_url=kakaoLogin.getUserinfo_url();
+		
+		//GET방식요청 구성 
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Authorization", "Bearer "+oAuthToken.getAccess_token());
+		HttpEntity entity=new HttpEntity(headers2);
+		
+		//비동기객체를 이용한 GET  요청
+		RestTemplate restTemplate2 = new RestTemplate();
+		ResponseEntity<String> userEntity=restTemplate2.exchange(userinfo_url, HttpMethod.GET, entity, String.class);
+		
+		String userBody = userEntity.getBody();
+		logger.info(userBody);
+		
+		HashMap<String, Object> userMap=new HashMap<String, Object>();
+		
+		//사용자 정보 추출하기 
+		ObjectMapper objectMapper2 = new ObjectMapper();
+		try {
+			userMap=objectMapper2.readValue(userBody, HashMap.class);
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		//String id=(String)userMap.get("id");
+		//String connected_at =(String)userMap.get("conntected_at");
+		
+		//내부의 json은 맵으로 처리
+		Map properties =(Map)userMap.get("properties");
+		String nickname=(String)properties.get("nickname");
+		
+		logger.info("id is "+userMap.get("id"));
+		logger.info("nickname is "+nickname);
+		
+		if(false) {
+			//이미 db이 이 회원의 식별고유 id 가 존재할 경우
+			//회원가입을 처리해주자 (서비스의 regist) 세션에 담자 
+		}else {
+			//그렇지 않은경우
+			//로그인 처리만 하자 (세션에 담자)
+		}
+		
+		ModelAndView mav = new ModelAndView("redirect:/");
+		
+		return mav;
+	}
+	
+	
 }
 
 
