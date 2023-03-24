@@ -1,4 +1,10 @@
+<%@page import="com.edu.springshop.domain.Product"%>
+<%@page import="com.edu.springshop.domain.Category"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%
+	List<Product> productList = (List)request.getAttribute("productList");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,12 +99,11 @@
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-											<!-- template은 자체로는 아무런 효과가 없고, 그냥 뷰의 영역임을 지정한다 -->
-											<template v-for="(product, i)  in currenList">
-												<product :key="product.product_idx" :num="num-i" :obj="product" />
+					                        <template v-for="(product, i) in currentList">
+					                        	<product :key="product.product_idx" :num="num-i" :obj="product"/>
 					                        </template>
 					                        <tr>
-					                        	<td id="paging-area"></td>
+					                        	<td colspan="6" id="paging-area"></td>
 					                        </tr>
 					                    </tbody>
 					                </table>
@@ -125,30 +130,31 @@
 	</div>
 	<!-- ./wrapper -->
 	<%@ include file="../inc/footer_link.jsp" %>
+	
 	<script type="text/javascript" src="/resources/js/Pager.js"></script>
 	<script type="text/javascript">
-		let pager = new Pager(); //인스턴스 생성
-		let currentPage=1; //현재 보고있는 페이지 
+		let pager = new Pager();
+		let currentPage=1;
 		
 		let app1;
 		let key=0;
 		
 		const product={
 			template:`
-                <tr>
+	            <tr>
 	                <td>{{n}}</td>
-	                <td>{{json.category.category_name}} </td>
+	                <td>{{json.category.category_name}}</td>
+	                <td><a href="#" v-on:click="getDetail()" >{{json.product_name}}</a></td>
 	                <td>{{json.product_name}}</td>
-	                <td>{{json.brand}}</td>
 	                <td><span class="tag tag-success">{{json.price}}</span></td>
 	                <td>{{json.discount}}</td>
-            	</tr>
+	            </tr>
 			`,
-			props:["obj", "num"], //props 오직 외부에서 전달되는 데이터 받기 위함
-			data(){ //자바로 비유하면 인스턴스 변수영역
+			props:["obj", "num"],
+			data(){
 				return{
-					json:this.obj, 
-					n:this.num					
+					json:this.obj,
+					n:this.num
 				};
 			}
 		};
@@ -160,85 +166,70 @@
 			},
 			data:{
 				count:5,
-				productList:[], //전체배열
-				currentList:[], //페이지당 보여질 배열
-				num:0 // 페이지당 시작 번호를 뷰 컴포넌트에서 접근할 수 있도록..
+				productList:[],  //files(read only) 배열의 정보를  담아놓을 배열
+				currentList:[], //현재 페이지에 보여질 배열
+				num:0
 			}
 		});
 		
 		function pageLink(n){
-			//서버에서 가져온 데이터를 대상으로 페이징 로직을 적용해보기
 			pager.init(app1.productList , n);
 			
-			console.log("totalRecord=",  pager.totalRecord);
-			console.log("pageSize=",  pager.pageSize);
-			console.log("totalPage=",  pager.totalPage);
-			console.log("blockSize=",  pager.blockSize);
-			console.log("currentPage=",  pager.currentPage);
-			console.log("firstPage=",  pager.firstPage);
-			console.log("lastPage=",  pager.lastPage);
-			console.log("curPos=",  pager.curPos);
-			console.log("num=",  pager.num);
+			console.log("pageSize is ", pager.pageSize);
+			console.log("curPos is ", pager.curPos);
+			console.log("num is ", pager.num);
+			
 			
 			app1.num=pager.num;
+			app1.currentList.splice(0, app1.currentList.length);
 			
-			//넘겨받은 페이지 번호를 이용하여, 해당 페이지에 보여질 배열을 생성 후 
-			//currentList 에 대입(Vue의 변수인 currentList 만 제어하면 디자인은 자동으로 변경)
-			
-			app1.currentList.splice(0, app1.currentList.length);//싹 비우고...
-			
-			for(let i=pager.curPos; i<pager.curPos+pager.pageSize;i++){
-				//num이 1보다 작아지면 멈춤 
-				if(pager.num<1)break;
+			for(let i=pager.curPos;i<pager.curPos+pager.pageSize; i++){
+				
+				if(pager.num<1){
+					break;
+				}
 				pager.num--;
 				
-				//전체 배열에서, 일부 배열로 옮겨 심기
-				app1.currentList.push(app1.productList[i]);	
+				app1.currentList.push(app1.productList[i]);				
 			}
+			
 		}
 		
-		//서버에서 상품목록 가져오기 
 		function getList(){
 			$.ajax({
 				url:"/admin/rest/product",
 				type:"get",
 				success:function(result, status, xhr){
-					//서버에서 가져온 json  배열을 뷰의 템블릿이 바라보고 있는 productList 에 대입만하면
-					//디자인은 알아서 변경된다...(개발자는 데이터 제어에만 집중하면 됨...디자인 신경꺼라)
-					app1.productList = result;
 					console.log(result);
 					
-					pageLink(currentPage); // 페이징 처리 계산 수행 
+					app1.productList=result;
 					
-					//넘버링 출력 
-					for(let i=pager.firstPage; i<=pager.lastPage;i++){
-						if(i > pager.totalPage)break; //내가 가진 페이지수를 넘어서면 반복문 빠져나오기
+					//페이징 처리
+					pageLink(currentPage);
+					
+					//페이지 번호 출력
+					$("#paging-area").append("<a href='#'>«</a>");
+					for(let i=pager.firstPage;i<=pager.lastPage;i++){
+						if(i >pager.totalPage)break;
 						$("#paging-area").append("<a href='javascript:pageLink("+i+")' style='margin:3px'>"+i+"</a>");
 					}
+					$("#paging-area").append("<a href='#'>»</a>");
 					
 				}
-			});
+			});	
 		}
 		
+		//서머노트 적용하기
 		$(function(){
-			//등록 이벤트 연결 
+			
+			//등록 이벤트 연결
 			$("#bt_regist").click(function(){
 				regist();
 			});
 			
-			getList();
-			
+			getList();	
 		});
 	
 	</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
