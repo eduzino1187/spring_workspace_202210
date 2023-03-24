@@ -4,7 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.edu.mvc2.domain.Board" alias="Board"/>
+		<typeAlias type="com.edu.mvc2.domain.Board" 		alias="Board"/>
+		<typeAlias type="com.edu.mvc2.domain.Gallery" 	alias="Gallery"/>
 
 	</typeAliases>
 	
