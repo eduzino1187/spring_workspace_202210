@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edu.springshop.domain.Member;
+import com.edu.springshop.domain.SnS;
 import com.edu.springshop.model.member.MemberService;
 import com.edu.springshop.sns.GoogleLogin;
 import com.edu.springshop.sns.GoogleOAuthToken;
@@ -169,23 +170,36 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
-		String id=(String)userMap.get("id");
+		String uid=(String)userMap.get("id");
 		String email=(String)userMap.get("email");
 		boolean verified_email=(Boolean)userMap.get("verified_email");
 		String nickname=(String)userMap.get("name");
 		
-		logger.info("id"+id);
+		logger.info("uid"+uid);
 		logger.info("email "+email);
 		logger.info("verified_email "+verified_email);
 		logger.info("nickname "+nickname);
 		
-		if(false) {
-			//이미 db이 이 회원의 식별고유 id 가 존재할 경우
-			//회원가입을 처리해주자 (서비스의 regist) 세션에 담자 
-		}else {
-			//그렇지 않은경우
-			//로그인 처리만 하자 (세션에 담자)
+		Member member=new Member();
+		member.setUid(uid);
+		
+		//회원 가입이 안되어 잇는 경우 
+		if(memberService.selectById(member)==null) {
+			//sns 정보 심어놓아야 서비스가 일한다
+			SnS sns = new SnS();
+			sns.setSns_name("google");
+			member.setSns(sns);
+			
+			member.setNickname(nickname);//닉네임 추가
+			
+			memberService.regist(member);
+		}else {//이미 회원가입이 되어 있다면..
+			member = memberService.selectById(member);
 		}
+		
+		//자동 로그인처리 (세션에 담아주자)
+		session.setAttribute("member", member);
+		
 		ModelAndView mav = new ModelAndView("redirect:/");
 		
 		return mav;

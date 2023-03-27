@@ -9,3 +9,6 @@
 <script src="/resources/shop/js/owl.carousel.min.js"></script>
 <script src="/resources/shop/js/jquery.nicescroll.min.js"></script>
 <script src="/resources/shop/js/main.js"></script>
+
+<!-- Vue.js ver2  -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>

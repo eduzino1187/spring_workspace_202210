@@ -1,13 +1,12 @@
 package com.edu.springshop.model.member;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.edu.springshop.domain.Member;
+import com.edu.springshop.domain.SnS;
 import com.edu.springshop.exception.EmailException;
 import com.edu.springshop.exception.HashException;
 import com.edu.springshop.exception.MemberException;
@@ -26,39 +25,23 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private MemberDAO memberDAO;
 	
+	@Autowired
+	private SnSDAO snsDAO;
+	
 	@Override
-	public List selectAll() {
-		return memberDAO.selectAll();
-	}
-
-	@Override
-	public Member select(Member member) {
-		return memberDAO.select(member);
+	public Member selectById(Member member) {
+		return memberDAO.selectById(member);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void regist(Member member) throws HashException, EmailException, MemberException{
-		//암호화 
-		String hash=passConverter.convertHash(member.getPass());
-		member.setPass(hash); //DTO의 패스워드를 hash 값으로 대체
+		//현재 가입하려고 하는 회원이 어떤  sns 유형으로 가입하는지 조사 
+		SnS sns=snsDAO.selectByName(member.getSns().getSns_name());//google, kakao, naver,home..
+		member.setSns(sns); //회원가입을 위한 sns 정보 대입, 이 시점부터는 member 는 sns을 가진 dto 임
 		
-		//이메일
-		//emailManager.send(member);
-		
-		//db insert
-		memberDAO.insert(member);
+		//insert
+		memberDAO.insert(member); //		
 	}
-
-	@Override
-	public void update(Member member) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void unregist(Member member) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
+
+
