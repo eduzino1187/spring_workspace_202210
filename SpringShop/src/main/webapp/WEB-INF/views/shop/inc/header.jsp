@@ -20,3 +20,8 @@
     <link rel="stylesheet" href="/resources/shop/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/resources/shop/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/resources/shop/css/style.css" type="text/css">
+    
+    <!-- Vue.js ver2  -->
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+
+

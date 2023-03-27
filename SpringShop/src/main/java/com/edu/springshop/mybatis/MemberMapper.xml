@@ -18,7 +18,11 @@
 	<select id="selectById" parameterType="Member" resultMap="memberMap">
 		select * from member where uid=#{uid}
 	</select>
-		
+
+	<select id="select" parameterType="Member" resultMap="memberMap">
+		select * from member where member_idx=#{member_idx}
+	</select>
+			
 	<!-- Member  DTO 안에  SnS DTO를 이용해야 함 -->
 	<insert id="insert" parameterType="Member">
 		insert into member(sns_idx, uid, nickname) 

@@ -10,7 +10,7 @@
 <%@ include file="./inc/header.jsp" %>
 </head>
 
-<body id="app1">
+<body>
     <!-- Page Preloder -->
 	<%@ include file="./inc/preloader.jsp" %>
 
@@ -44,7 +44,7 @@
     <!-- Breadcrumb End -->
     
     <!-- Product Details Section Begin -->
-    <section class="product-details spad">
+    <section class="product-details spad" > 
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
@@ -65,7 +65,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                
+                <div class="col-lg-6"  id="app1">
                     <div class="product__details__text">
                         <h3><%=product.getProduct_name() %> <span>Brand: <%=product.getBrand()  %></span></h3>
                         <div class="rating">
@@ -83,7 +84,7 @@
                             <div class="quantity">
                                 <span>Quantity:</span>
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input type="text" v-model="ea"  v-on:keyup="getSum()"  value="1">
                                 </div>
                             </div>
                             <a href="javascript:addCart()" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
@@ -96,13 +97,7 @@
                             <ul>
                                 <li>
                                     <span>Availability:</span>
-                                    <div class="stock__checkbox">
-                                        <label for="stockin">
-                                            In Stock
-                                            <input type="checkbox" id="stockin">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
+                                    <div class="stock__checkbox" id="total"></div>
                                 </li>
                                 <li>
                                     <span>Available color:</span>
@@ -323,15 +318,53 @@
 
 <!-- Js Plugins -->
 <%@ include file="./inc/footer_link.jsp" %>
+
 <script type="text/javascript">
+let app1;
+
+app1 = new Vue({
+	el:"#app1", 
+	data:{
+		ea:3 //디자인 영역에  v-model로 선언된 컴포넌트와 이 변수는 서로 동기화되어 있다..(binding)
+			//어느 한쪽이 바뀌어도 둘다 동일한 효과를 낸다..	
+	},
+	methods:{
+		getSum(){
+			$("#total").html(app1.ea);
+		}
+	}
+});
 
 //장바구니에 상품 추가하기
 function addCart(){
-		
+	
+	let param={
+		product:{
+			product_idx:<%=product.getProduct_idx()%>
+		},
+		ea: app1.ea		
+	};
+	
+	//비동기로 장바구니 담자 
+	$.ajax({
+		url:"/rest/shop/cart",
+		type:"post",
+		data:JSON.stringify(param), //객체 자체를 전송할 수 없기에, 문자열로 변환하여 전송..
+		contentType:"application/json", //head에 데이터 종류 명시
+		success:function(result, status, xhr){
+			if(confirm(result.msg+"\n장바구니로 이동할까요?")){
+				//장바구니 페이지 보여주기 
+				location.href="/shop/cart";
+			}
+		},
+		error:function(xhr, status, err){
+			alert(xhr.responseText);
+		}
+	});
 }
 
 $(function(){
-	init();
+	
 });
 </script>
 </body>
