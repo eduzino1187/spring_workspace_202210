@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,9 @@ import com.edu.springshop.model.product.ProductService;
 //상품 리스트부터 구매단계까지의 쇼핑 전반적인 요청을 처리할 하위 컨트롤러
 @Controller
 public class ShopController {
-
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
+	
+	
 	@Autowired
 	private ProductService productService;
 	
@@ -59,6 +63,8 @@ public class ShopController {
 		Member member = (Member)session.getAttribute("member");
 		
 		List cartList=cartService.selectAll(member);//어떤 회원의 장바구니 목록인지...
+		
+		logger.info("cartList is "+cartList);
 		
 		ModelAndView mav =new ModelAndView("shop/payment/cartlist");
 		mav.addObject("cartList", cartList);
